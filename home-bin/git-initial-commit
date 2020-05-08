@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# vim: filetype=sh
+
+set -e   # exit if any command fails
+
+# how many commits?
+commit_count=$(git rev-list --all --count)
+
+# default to current branch
+# also, combined with `set -e` we get an abort if we're not in a git repo
+# directory
+#branch=$(git rev-parse --abbrev-ref HEAD)
+
+# we want our files to go into the top-level directory ot the project
+topdir=$(git rev-parse --show-toplevel)
+
+# grab a .gitignore; assume we have curl
+# (currently only writing for ourselves)
+if [ -f $topdir/.gitignore ]; then
+    echo "WARN: $topdir/.gitignore already exists"
+else
+    curl -s -o $topdir/.gitignore https://www.gitignore.io/api/git,vim,node,ruby
+    git add $topdir/.gitignore
+fi
+
+# drop in a pre-commit config
+if [ -f $topdir/.pre-commit-config.yaml ]; then
+    echo "WARN: $topdir/.pre-commit-config.yaml already exists"
+else
+    pre-commit sample-config > $topdir/.pre-commit-config.yaml
+    git add $topdir/.pre-commit-config.yaml
+fi
+
+# https://unix.stackexchange.com/a/152554
+if [ "${commit_count}" -lt 1 ]; then
+    git_parms=(-m 'Initial Commit (dotfiles)')
+else
+    git_parms=(-m 'Add dotfiles')
+fi
+
+for f in $(git diff --cached --name-only); do
+    git_parms+=(-m " - add ${f}")
+done
+
+git commit "${git_parms[@]}" && git log --oneline -n 1
