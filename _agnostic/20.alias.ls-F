@@ -1,0 +1,2 @@
+# usually overridden by colorls, but just nice to have
+alias ls="ls -F"
