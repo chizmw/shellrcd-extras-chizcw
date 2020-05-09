@@ -1,0 +1,14 @@
+# if we haven't dropped a file asking us not to, we attach to any sesison we
+# can find
+if [ -f $HOME/.no-tmux-attach ]; then
+    true;
+else
+    if type "tmux" >/dev/null; then
+        # if not inside a tmux session, and if no session is started, start a new session
+        test -z "$TMUX" && (tmux attach || tmux new-session)
+
+        # these won't work as expected if you have zsh/50.precmd.tmux active
+        tmux-window-title     () { tmux rename-window "$1"; }
+        tmux-window-title-cwd () { tmux-window-title $(basename $PWD); }
+    fi
+fi
