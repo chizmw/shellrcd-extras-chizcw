@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+# pick up "anything git-" in the path
+# https://github.com/zsh-users/zsh/blob/50f8fa972c3795a115e7faff0b4c140b40eab5f0/Completion/Unix/Command/_git#L12
+zstyle ':completion:*:*:git:*' user-commands ${${(M)${(k)commands}:#git-*}/git-/}
+
+# try to be smart about anything we can find with a description
+## TODO
+
+
+# be specific about some things, so we get descriptions for them
+if type "git-initial-commit" 2>&1 >/dev/null; then
+    zstyle ':completion:*:*:git:*' user-commands initial-commit:'create initial commit in new repo with useful dotfiles'
+fi
