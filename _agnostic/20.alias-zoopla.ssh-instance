@@ -1,0 +1,8 @@
+function ssh-instance() {
+    if [ -z "$1" ]; then
+        echo "ssh-instance «host_ip»";
+    else
+        tmux-window-title "ssh:$1";
+        ssh -i ~/.ssh/id_rsa-zoopla-keypair-eu ec2-user@$1;
+    fi;
+}
