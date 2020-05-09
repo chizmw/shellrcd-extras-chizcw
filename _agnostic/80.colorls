@@ -1,0 +1,11 @@
+# https://github.com/athityakumar/colorls
+if type "colorls" >/dev/null; then
+    source $(dirname $(gem which colorls))/tab_complete.sh
+
+    alias ls="$(which colorls) --sd"
+    alias ll='ls -lart'
+    alias lg='ls --gs'
+    alias llg='ls --gs -lart'
+else
+    echo "[INFO] consider installing colorls; https://github.com/athityakumar/colorls"
+fi
