@@ -1,0 +1,5 @@
+# vim: filetype=sh
+if type "curl" >/dev/null; then
+    # mostly superseded by "git initial-commit"
+    alias grab-gitignore='curl -s -o .gitignore https://www.gitignore.io/api/vim'
+fi
