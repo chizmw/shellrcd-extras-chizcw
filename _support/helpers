@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# use this instead of "echo"; you'll love yourself later when you try to scp/ssh $cmd
+function debug { echo "$@" 1>&2; }
+
+# call this near the start of your script(s) if you don't need them for
+# quick'n'dirty "ssh <cmd>" or "scp" actions
+function interactive {
+    if [[ $- =~ "i" ]]; then true; else false; fi
+}
