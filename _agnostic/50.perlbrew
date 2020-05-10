@@ -1,0 +1,5 @@
+# vim: filetype=sh
+# weird that we use bash for zsh as well, but seems to work
+if [ -f $HOME/perl5/perlbrew/etc/bashrc ]; then
+    source $HOME/perl5/perlbrew/etc/bashrc
+fi
