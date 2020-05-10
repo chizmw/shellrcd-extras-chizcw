@@ -1,0 +1,32 @@
+# vim: filetype=sh
+
+# don't even bother if we don't have ssh-add available
+if type "ssh-add" >/dev/null; then
+    if type "ssh-agent" >/dev/null; then
+        _grep=grep
+
+        open_connection_failed=$(ssh-add -l 2>&1 |${_grep} -c 'Could not open a connection to your authentication agent');
+        num_identities_loaded=$(ssh-add -l 2>&1 |${_grep} -c 'The agent has no identities');
+            error_connecting=$(ssh-add -l 2>&1 |${_grep} -c 'Error connecting to agent: No such file or directory');
+
+        if [ -n $error_connecting -a $error_connecting -gt 0 ]; then
+            # start the agent if it's not running
+            if [ -z $SSH_AGENT_PID ]; then
+                eval `ssh-agent`;
+            fi
+            ssh-add;
+        elif [ -n $open_connection_failed -a $open_connection_failed -gt 0 ]; then
+            # start the agent if it's not running
+            if [ -z $SSH_AGENT_PID ]; then
+                eval `ssh-agent`;
+            fi
+            ssh-add;
+        elif [ -n $num_identities_loaded -a $num_identities_loaded -gt 0 ]; then
+            # start the agent if it's not running
+            if [ -z $SSH_AGENT_PID ]; then
+                eval `ssh-agent`;
+            fi
+            ssh-add;
+        fi
+    fi
+fi
