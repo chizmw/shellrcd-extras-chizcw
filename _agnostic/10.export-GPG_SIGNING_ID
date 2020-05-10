@@ -1,0 +1,5 @@
+# vim filetype=sh
+# setting this will trigger a block in _shared/git-aliases.example
+# we need thise set before we fire 30.git-config
+# "lucky we chose to set aliases and exports early
+export GIT_SIGNINGKEY_ID="8788FBC53885BB11"
