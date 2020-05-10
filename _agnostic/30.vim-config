@@ -1,0 +1,154 @@
+# vim: filetype=sh
+source $HOME/.shellrc.d/_support/helpers
+interactive ||return;
+
+if type "md5sum" 2>&1 >/dev/null; then
+    #echo "[INFO] using normal md5sum"
+    _md5sum="md5sum"
+elif type "md5" 2>&1 >/dev/null; then
+    #echo "[INFO] faking md5sum with md5 -r"
+    _md5sum="md5 -r"
+else
+    echo "[ERROR] can't find any kind of md5/md5sum"
+    return
+fi
+
+# what's the md5 of .vimrc before we do anything to it?
+if [ ! -e $HOME/.vimrc ]; then
+    touch $HOME/.vimrc
+fi
+premd5=$(eval $_md5sum $HOME/.vimrc |awk '{print $1}');
+
+# a convenience function to add Vundle plugins in the correct place
+function add-vundle-plugin() {
+    if [ -z "$1" ]; then
+        debug "usage: add-vundle-plugin <plugin reference>";
+        return;
+    fi
+
+    plugline="Plugin '$1'";
+
+    _count=$(grep -c "$plugline" $HOME/.vimrc);
+    if [ $_count -gt 0 ]; then
+        if [ -n "$VUNDLE_VERBOSE" ]; then
+            debug "exists: $plugline";
+        fi
+        return;
+    fi
+
+    if [ -n "$VUNDLE_VERBOSE" ]; then
+        debug "adding: $plugline";
+    fi
+    # use perl to insert the plugin in "the right place" in the config file
+    VUNDLE_LINE="$plugline" perl -i -lne 'print $_;print "$ENV{VUNDLE_LINE}" if(/" --VUNDLE-PLUGINS--/);' $HOME/.vimrc
+}
+
+# if we DO NOT have the plugin; reinitialise
+if [ ! -e ~/.vim/bundle/Vundle.vim -o $(ls -1 ~/.vim/bundle/Vundle.vim/ |wc -l) -eq 0 ]; then
+    rm -rf ~/.vim/bundle/Vundle.vim
+    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim;
+
+cat <<EOF >$HOME/.vundle.tmp
+" details at: https://github.com/VundleVim/Vundle.vim
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" --VUNDLE-PLUGINS--
+Plugin 'tpope/vim-fugitive'
+Plugin 'neo4j-contrib/cypher-vim-syntax'
+Plugin 'junegunn/fzf.vim'
+Plugin 'itchyny/lightline.vim'
+Plugin 'fholgado/minibufexpl.vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-vividchalk'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+let mapleader = ','
+
+set hidden
+set background=dark
+set backspace=indent,eol,start
+set expandtab
+set history=1000
+set ignorecase
+set incsearch
+set nocompatible
+set nohlsearch
+set shiftround
+set shiftwidth=4
+set showmatch
+set smartcase
+set tabstop=4
+set wildmode=longest,list
+syntax enable                                   "same as above I guess
+syntax on                                       "turn on syntax highlighting
+au BufNewFile,BufRead *handler set ft=mason     "mason highlight handler files
+au BufNewFile,BufRead *.html set ft=mason       "mason highlight .html files
+au BufNewFile,BufRead *.mas set ft=mason        "mason highlight .mas files
+au BufNewFile,BufRead *.psgi set ft=perl        "perl highlight PSGI files
+au BufNewFile,BufRead *.t set ft=perl           "perl highlight .t files
+set viminfo='10,\"100,:20,%,n~/.viminfo "(and next line) remember and jump to my last file position
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
+" only works in vim 7.3 I think
+if exists("+colorcolumn")
+    set colorcolumn=80
+endif
+
+colorscheme vividchalk
+
+" automatically source the .vimrc file if I change it
+" the bang (!) forces it to overwrite this command rather than stack it
+au! BufWritePost .vimrc source %
+
+noremap <leader>v  :source ~/.vimrc<cr>
+noremap <leader>V  :e ~/.vimrc<cr>
+
+noremap ,dbs :set paste<cr>o$DB::single=1; # TODO remove this breakpointset nopaste<cr>
+
+let g:miniBufExplSplitBelow=0
+let g:miniBufExplMapWindowNavVim = 1
+let g:miniBufExplMapWindowNavArrows = 1
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplModSelTarget = 1
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhitespace /\(\s\+$\)\|\t/
+au BufWinEnter * match ExtraWhitespace /\(\s\+$\)\|\t/
+
+highlight SignColumn ctermbg=black
+EOF
+
+cat $HOME/.vundle.tmp $HOME/.vimrc > $HOME/.vimrc-new
+cp $HOME/.vimrc-new $HOME/.vimrc && rm $HOME/.vimrc-new $HOME/.vundle.tmp
+
+fi
+
+
+# plugins and bundles
+add-vundle-plugin airblade/vim-gitgutter
+add-vundle-plugin fholgado/minibufexpl.vim
+add-vundle-plugin itchyny/lightline.vim
+add-vundle-plugin junegunn/fzf.vim
+add-vundle-plugin neo4j-contrib/cypher-vim-syntax
+add-vundle-plugin tpope/vim-fugitive
+#add-vundle-plugin wakatime/vim-wakatime
+
+postmd5=$(eval $_md5sum $HOME/.vimrc |awk '{print $1}');
+
+# only run the install command if we've made the file change by adding new plugin bundles
+if [ $premd5 != $postmd5 ]; then
+    vim +PluginInstall +qall
+fi
