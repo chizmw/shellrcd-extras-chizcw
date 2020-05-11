@@ -1,0 +1,26 @@
+# https://stackoverflow.com/a/7522866
+if ! type "git" >/dev/null; then
+    # no git; nothing to do
+    true;
+else
+    # if we appear to have git, I'd like to be Chisel with a location based
+    # email address
+    git config --global user.name "Chisel"
+
+    host="${HOST}"
+    if [ -z "${host}" ]; then
+        host="$(hostname)"
+    fi
+
+    case $host in
+        *.net-a-porter.com)
+            git config --global user.email "chisel.wright@net-a-porter.com";
+            ;;
+        macbook.zoopla|Chisels-MacBook-Air.local|*.dev.uk|chisel-zpg.local|*.eu-west-1.compute.internal)
+            git config --global user.email "chisel.malik-wright@zoopla.co.uk";
+            ;;
+        *)
+            git config --global user.email "chisel@chizography.net";
+            ;;
+    esac
+fi
