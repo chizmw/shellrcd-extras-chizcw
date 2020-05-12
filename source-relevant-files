@@ -33,3 +33,6 @@ for x in "${files[@]}"; do
   if [ -n "$SHELLRCD_DEBUG" ]; then echo "[DEBUG][${x//.\//}] sourcing file..."; fi
   source "$x"
 done
+
+# explicity unset shellrcddir; it's hanging around for some reason
+unset shellrcddir
