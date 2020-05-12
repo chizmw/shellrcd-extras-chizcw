@@ -3,30 +3,40 @@
 # don't even bother if we don't have ssh-add available
 if type "ssh-add" >/dev/null; then
     if type "ssh-agent" >/dev/null; then
-        _grep=grep
+        # don't bother if we're on a Mac; rely on the user setting up 'ssh-add -K'
+        #     -K          Store passphrases in your keychain.
+        # you can start with no identities in your keycain, which would
+        # normally trigger `ssh-add`, but as soon as you do ssh somewhere, the
+        # mac magic kicks in, and you have it there
+        case "$(uname)" in
+            Darwin*)
+                ;;
+            *)
+                _grep=grep
 
-        open_connection_failed=$(ssh-add -l 2>&1 |${_grep} -c 'Could not open a connection to your authentication agent');
-        num_identities_loaded=$(ssh-add -l 2>&1 |${_grep} -c 'The agent has no identities');
-            error_connecting=$(ssh-add -l 2>&1 |${_grep} -c 'Error connecting to agent: No such file or directory');
+                open_connection_failed=$(ssh-add -l 2>&1 |${_grep} -c 'Could not open a connection to your authentication agent');
+                num_identities_loaded=$(ssh-add -l 2>&1 |${_grep} -c 'The agent has no identities');
+                    error_connecting=$(ssh-add -l 2>&1 |${_grep} -c 'Error connecting to agent: No such file or directory');
 
-        if [ -n $error_connecting -a $error_connecting -gt 0 ]; then
-            # start the agent if it's not running
-            if [ -z $SSH_AGENT_PID ]; then
-                eval `ssh-agent`;
-            fi
-            ssh-add;
-        elif [ -n $open_connection_failed -a $open_connection_failed -gt 0 ]; then
-            # start the agent if it's not running
-            if [ -z $SSH_AGENT_PID ]; then
-                eval `ssh-agent`;
-            fi
-            ssh-add;
-        elif [ -n $num_identities_loaded -a $num_identities_loaded -gt 0 ]; then
-            # start the agent if it's not running
-            if [ -z $SSH_AGENT_PID ]; then
-                eval `ssh-agent`;
-            fi
-            ssh-add;
-        fi
+                if [ -n $error_connecting -a $error_connecting -gt 0 ]; then
+                    # start the agent if it's not running
+                    if [ -z $SSH_AGENT_PID ]; then
+                        eval `ssh-agent`;
+                    fi
+                    ssh-add;
+                elif [ -n $open_connection_failed -a $open_connection_failed -gt 0 ]; then
+                    # start the agent if it's not running
+                    if [ -z $SSH_AGENT_PID ]; then
+                        eval `ssh-agent`;
+                    fi
+                    ssh-add;
+                elif [ -n $num_identities_loaded -a $num_identities_loaded -gt 0 ]; then
+                    # start the agent if it's not running
+                    if [ -z $SSH_AGENT_PID ]; then
+                        eval `ssh-agent`;
+                    fi
+                    ssh-add;
+                fi
+        esac
     fi
 fi
