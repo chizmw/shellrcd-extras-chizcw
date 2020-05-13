@@ -10,3 +10,9 @@ if ! type "glow" >/dev/null; then
       echo "glow: can't locate 'brew' or 'go'; skipping installation"
   fi
 fi
+
+# if we find it's installed when we get this far, either because we already had
+# it, or just installed it above, add an alias that defaults to using --pager
+if type "glow" >/dev/null; then
+    alias glow='glow --pager'
+fi
