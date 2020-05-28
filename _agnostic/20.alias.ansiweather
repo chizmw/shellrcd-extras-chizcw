@@ -1,0 +1,4 @@
+# vim: syntax=sh
+if type "ansiweather" >/dev/null; then
+    alias weather-london="ansiweather -l 'London, UK' -a false"
+fi
