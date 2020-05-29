@@ -1,0 +1,6 @@
+# vim: filetype=sh
+
+if type "git" >/dev/null; then
+    alias edit-last='${EDITOR:-vim} $(git diff --name-only HEAD~1..HEAD)'
+    alias edit-changed='${EDITOR:-vim} $(git ls-files -m)'
+fi
