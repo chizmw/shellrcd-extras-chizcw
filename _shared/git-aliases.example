@@ -69,6 +69,11 @@ if type "git" >/dev/null; then
     # without a range will edit the files in your most recent commit
     git config --global alias.edit     "! sh -c '\$EDITOR \`git fshow \$1\`' -"
 
+    # I took a tweet from Ovid and made these
+    # https://twitter.com/OvidPerl/status/1266262204342366210
+    git config --global alias.edit-last     "! sh -c '\${EDITOR:-vim} \$(git diff --name-only HEAD~1..HEAD)'"
+    git config --global alias.edit-changed  "! sh -c '\${EDITOR:-vim} \$(git ls-files -m)'"
+
     # make git do "sensible things with colours"
     git config --global color.branch      auto
     git config --global color.diff        auto
