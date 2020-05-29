@@ -1,0 +1,6 @@
+# vim: filetype=sh
+
+if type "aws" > /dev/null; then
+    alias list-superusers-portal="aws iam get-group --group-name ZooplaPortalSuperUsers --query 'Users[].UserName'"
+    alias list-superusers-software="aws iam get-group --group-name ZooplaSoftwareSuperUsers --query 'Users[].UserName'"
+fi
