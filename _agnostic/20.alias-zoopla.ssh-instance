@@ -1,9 +1,12 @@
+# vim: filetype=sh
+unset ssh-instance
 function ssh-instance() {
     if [ -z "$1" ]; then
         echo "ssh-instance «host_ip»";
     else
-        if type tmux-window-title; then
-          tmux-window-title "ssh:$1";
+        # if we're running in tmux, set the window title
+        if [ -n "$TMUX" ]; then
+          tmux rename-window "ssh:$1"
         fi
         ssh -i ~/.ssh/id_rsa-zoopla-keypair-eu ec2-user@$1;
     fi;
