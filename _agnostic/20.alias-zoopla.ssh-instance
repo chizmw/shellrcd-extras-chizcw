@@ -2,7 +2,9 @@ function ssh-instance() {
     if [ -z "$1" ]; then
         echo "ssh-instance «host_ip»";
     else
-        tmux-window-title "ssh:$1";
+        if type tmux-window-title; then
+          tmux-window-title "ssh:$1";
+        fi
         ssh -i ~/.ssh/id_rsa-zoopla-keypair-eu ec2-user@$1;
     fi;
 }
