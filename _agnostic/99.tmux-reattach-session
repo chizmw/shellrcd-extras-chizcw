@@ -12,6 +12,7 @@ else
             # these won't work as expected if you have zsh/50.precmd.tmux active
             tmux-window-title     () { tmux rename-window "$1"; }
             tmux-window-title-cwd () { tmux-window-title $(basename $PWD); }
+            alias tmux-kickoff='tmux attach -d || tmux new-session'
 
             # this really does not play well with p10k!
             if [ ! -e $HOME/.p10k.zsh ] && [ "$(basename $SHELL)" = "zsh" ; then
