@@ -1,5 +1,9 @@
 # vim: filetype=sh
-unset ssh-instance
+
+if type "ssh-instance" >/dev/null; then
+    unset ssh-instance
+fi
+
 function ssh-instance() {
     if [ -z "$1" ]; then
         echo "ssh-instance «host_ip»";
