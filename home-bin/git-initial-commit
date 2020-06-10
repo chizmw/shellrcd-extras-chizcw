@@ -20,7 +20,8 @@ topdir=$(git rev-parse --show-toplevel)
 if [ -f $topdir/.gitignore ]; then
     echo "WARN: $topdir/.gitignore already exists"
 else
-    curl -s -o $topdir/.gitignore https://www.gitignore.io/api/git,vim,node,ruby
+    # now redirects somewhere else
+    curl -Ls -o $topdir/.gitignore https://gitignore.io/api/git,vim,node,ruby
     git add $topdir/.gitignore
 fi
 
