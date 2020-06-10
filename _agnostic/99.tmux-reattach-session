@@ -17,9 +17,10 @@ else
             # this really does not play well with p10k!
             if [ ! -e $HOME/.p10k.zsh ] && [ "$(basename $SHELL)" = "zsh" ; then
             # if not inside a tmux session, and if no session is started, start a new session
-                test -z "$TMUX" && (\tmux attach || \tmux new-session)
+                test -z "$TMUX" && tmux-kickoff
             else
                 echo "[shellrcd] p10k startup and $(basename $0) don't play well together. Skipping"
+                echo "[shellrcd] run 'tmux-kickoff' to rejoin any existing sessions."
             fi
         fi
     fi
