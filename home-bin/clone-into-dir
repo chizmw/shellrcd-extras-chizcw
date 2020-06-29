@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euo pipefail
+
+cloneURL="${1:?missing git clone url}"
+
+cd ~/development
+
+# e.g. git@gitlab.zoopla.co.uk:future-velocity/api-graphql.git
+pat='git@gitlab.zoopla.co.uk:(.*)/(.*).git'
+
+[[ $cloneURL =~ $pat ]]
+
+echo "Cloning ${BASH_REMATCH[0]} into ${BASH_REMATCH[1]}"
+
+mkdir -p "${BASH_REMATCH[1]}"
+
+git -C "${BASH_REMATCH[1]}" clone "${cloneURL}"
+
+echo "# you can now: cd ${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
