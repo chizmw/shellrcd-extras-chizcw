@@ -81,6 +81,9 @@ if type "git" >/dev/null; then
     git config --global color.status      auto
     git config --global color.ui          auto
 
+    # make whitespace changes more obvious (esp. at eol); https://stackoverflow.com/a/5259137
+    git config --global diff.wsErrorHighlight all
+
     # it's nice to sign your commits
     # we'll only set these if it looks likes the user wants us to
     # (by them setting a variable we just made up for them)
