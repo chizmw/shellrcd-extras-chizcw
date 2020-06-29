@@ -37,7 +37,7 @@ function process_homebin_directory() {
     dest_binfiles=$(find "${directory}/home-bin" -mindepth 1 -type f)
     for binfile in $dest_binfiles; do
         echo "[binfile] $binfile"
-        result="${binfile//*home-bin\//bin\/}"
+        result="${binfile//*home-bin\//bin/}"
         echo "[result]  $result"
 
         if [[ ! -L "$HOME/$result" ]]; then
