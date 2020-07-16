@@ -4,6 +4,9 @@
 
 set -e   # exit if any command fails
 
+# if we haven't already initialised, do so, saves an extra manual step
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || git init
+
 # how many commits?
 commit_count=$(git rev-list --all --count)
 
@@ -31,6 +34,8 @@ if [ -f $topdir/.pre-commit-config.yaml ]; then
 else
     pre-commit sample-config > $topdir/.pre-commit-config.yaml
     git add $topdir/.pre-commit-config.yaml
+    # make sure we actually use it
+    pre-commit install
 fi
 
 # https://unix.stackexchange.com/a/152554
