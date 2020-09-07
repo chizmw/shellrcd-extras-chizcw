@@ -3,3 +3,4 @@ export PINTO_REPOSITORY_ROOT=http://pinto.endpoint
 export PROJECT_UPDATE_FF_ONLY=1
 export TFROLE_FORCED=admin
 export TMP_ROOT=/tmp
+export TF_VAR_target_role='zoopla/account/PlatAdmins'
