@@ -4,7 +4,7 @@ if ! type "aws" >/dev/null; then
     true
 else
     # if we don't have it installed
-    if ! type "aws-vault" 2>/dev/null; then
+    if ! type "aws-vault" >/dev/null; then
         curl -sL -o ~/bin/aws-vault 'https://github.com/99designs/aws-vault/releases/download/v5.4.4/aws-vault-linux-amd64'
         chmod 0755 ~/bin/aws-vault
         echo '[aws-vault] installed; more information: https://github.com/99designs/aws-vault#quick-start'
