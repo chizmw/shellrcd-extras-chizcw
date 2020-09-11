@@ -1,12 +1,23 @@
 # https://stackoverflow.com/a/7522866
-if ! type "aws" >/dev/null; then
+if ! type "aws" >/dev/null 2>&1; then
     # no aws; nothing to do
     true
 else
+    # required version, so we know if we should try to upgrade
+    requiredVersion="v6.0.0"
+
     # if we don't have it installed
-    if ! type "aws-vault" >/dev/null; then
-        curl -sL -o ~/bin/aws-vault 'https://github.com/99designs/aws-vault/releases/download/v6.0.0/aws-vault-linux-amd64'
+    if ! type "aws-vault" >/dev/null 2>&1; then
+        currentVersion="v0.0.0"
+    else
+        currentVersion="$(aws-vault --version 2>&1)"
+    fi
+
+    if [ "${requiredVersion}" != "${currentVersion}" ]; then
+        curl -sL -o ~/bin/aws-vault "https://github.com/99designs/aws-vault/releases/download/${requiredVersion}/aws-vault-linux-amd64"
         chmod 0755 ~/bin/aws-vault
-        echo '[aws-vault] installed; more information: https://github.com/99designs/aws-vault#quick-start'
+        echo    '[aws-vault] installed; more information: https://github.com/99designs/aws-vault#quick-start'
+        echo -n '[aws-vault] '
+        aws-vault --version 2>&1
     fi
 fi
