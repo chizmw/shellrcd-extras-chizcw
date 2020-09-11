@@ -14,10 +14,27 @@ else
     fi
 
     if [ "${requiredVersion}" != "${currentVersion}" ]; then
-        curl -sL -o ~/bin/aws-vault "https://github.com/99designs/aws-vault/releases/download/${requiredVersion}/aws-vault-linux-amd64"
-        chmod 0755 ~/bin/aws-vault
-        echo    '[aws-vault] installed; more information: https://github.com/99designs/aws-vault#quick-start'
-        echo -n '[aws-vault] '
+        # we do not want thew linux version installed on a mac
+        # assume we're smart and have already installed brew
+        case "$(uname)" in
+            Darwin*)
+                echo "[aws-vault] running: brew cask install aws-vault"
+                brew cask install aws-vault
+                ;;
+
+            Linux)
+                curl -sL -o ~/bin/aws-vault "https://github.com/99designs/aws-vault/releases/download/${requiredVersion}/aws-vault-linux-amd64"
+                chmod 0755 ~/bin/aws-vault
+                hash -r
+                echo    '[aws-vault] installed; more information: https://github.com/99designs/aws-vault#quick-start'
+                echo -n '[aws-vault] '
+                ;;
+
+            *)
+                echo "[aws-vault] not sure what flavour you are"
+                exit
+        esac
+
         aws-vault --version 2>&1
     fi
 fi
