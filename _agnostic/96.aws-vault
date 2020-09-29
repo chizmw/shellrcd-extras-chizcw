@@ -1,3 +1,4 @@
+#!/bin/bash
 # https://stackoverflow.com/a/7522866
 if ! type "aws" >/dev/null 2>&1; then
     # no aws; nothing to do
