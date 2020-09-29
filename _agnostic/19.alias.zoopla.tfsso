@@ -1,0 +1,10 @@
+
+unset tfsso
+function tfsso() {
+    if [ ! -d /tmp/terraform-wrapper ]; then
+        git clone git@gitlab.zoopla.co.uk:devops/terraform-wrapper.git /tmp/terraform-wrapper
+    else
+        (cd /tmp/terraform-wrapper && git pull)
+    fi
+    aws-vault exec $AWS_SSO_PROFILE /tmp/terraform-wrapper/terraform $@
+}
