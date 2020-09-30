@@ -1,12 +1,15 @@
 #!/bin/bash
 
+# codebasev2 / legacy stuff
 export LOCAL_ROOT='/tmp'
 export PINTO_REPOSITORY_ROOT='http://pinto.endpoint'
 export PROJECT_UPDATE_FF_ONLY='1'
 export TMP_ROOT='/tmp'
 
-# some useful aws sso "stuff"
-export USE_AWS_SSO='1'
-export AWS_SSO_PROFILE='zoopla/account/PlatAdmins'
+# terraform stuff
 export TF_VAR_target_role='zoopla/account/PlatAdmins'
 export TFROLE_FORCED='admin'
+
+# some useful aws sso "stuff"
+export USE_AWS_SSO='1'
+export AWS_SSO_PROFILE='chisel.malik-wright'
