@@ -52,7 +52,7 @@ else
 
             *)
                 echo "[aws-vault] not sure what flavour you are"
-                exit
+                #exit
         esac
 
         aws-vault --version 2>&1
@@ -60,6 +60,9 @@ else
 
     # always do this is we have aws-vault (and not jusst if versions don't match
     case "$(uname)" in
+        Darwin*)
+            ;;
+
         Linux)
             # This is as close to 'required' as you can be, unless you want
             # to mess about with other stoarage options on your own
@@ -71,7 +74,7 @@ else
             ;;
         *)
             echo "[aws-vault] not sure what flavour you are"
-            exit
+            #exit
     esac
 
 
