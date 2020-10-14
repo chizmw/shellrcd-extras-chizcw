@@ -1,6 +1,6 @@
 # https://stackoverflow.com/a/7522866
 if ! type "glow" >/dev/null; then
-  if type "brew" >x /dev/null; then
+  if type "brew" >/dev/null; then
       echo "[Installing 'glow' with 'brew']"
       brew install charmbracelet/homebrew-tap/glow
   elif type go >/dev/null; then
