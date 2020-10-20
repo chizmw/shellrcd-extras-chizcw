@@ -12,17 +12,24 @@ patZoopla='git@gitlab.zoopla.co.uk:(.*)/(.*).git'
 patGithub='git@github.com:(.*)/(.*).git'
 
 if [[ $cloneURL =~ $patZoopla ]]; then
-    echo "Cloning ${BASH_REMATCH[0]} into ${BASH_REMATCH[1]}"
-    mkdir -p "${BASH_REMATCH[1]}"
-    git -C "${BASH_REMATCH[1]}" clone "${cloneURL}"
-    echo "# you can now: cd ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+    if [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
+        echo "# project already exists: ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+    else
+        echo "Cloning ${BASH_REMATCH[0]} into ${BASH_REMATCH[1]}"
+        mkdir -p "${BASH_REMATCH[1]}"
+        git -C "${BASH_REMATCH[1]}" clone "${cloneURL}"
+        echo "# you can now: cd ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+    fi
 elif [[ $cloneURL =~ $patGithub ]]; then
-    mkdir -p "${rootDir}/github"
-    cd "${rootDir}/github"
-
-    mkdir -p "${BASH_REMATCH[1]}"
-    git -C "${BASH_REMATCH[1]}" clone "${cloneURL}"
-    echo "# you can now: cd $(pwd)/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+    if [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
+        echo "# project already exists: ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+    else
+        mkdir -p "${rootDir}/github"
+        cd "${rootDir}/github"
+        mkdir -p "${BASH_REMATCH[1]}"
+        git -C "${BASH_REMATCH[1]}" clone "${cloneURL}"
+        echo "# you can now: cd $(pwd)/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+    fi
 else
     echo "Unsupported git uri: $cloneURL"
 fi
