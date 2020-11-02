@@ -1,0 +1,12 @@
+#!/bin/sh
+
+case "$(uname)" in
+    Darwin*)
+        cd $HOME/Desktop
+
+        mkdir -p                $HOME/Pictures/Screenshots/
+        mv -f Screenshot*.png   $HOME/Pictures/Screenshots/ 2>/dev/null
+
+        mv -f *.{jpg,png}       $HOME/Pictures/             2>/dev/null
+        ;;
+esac
