@@ -73,7 +73,10 @@ COMPLETION_WAITING_DOTS="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=023"
+TERM=xterm-256color
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=9"
+#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=023"
+#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
