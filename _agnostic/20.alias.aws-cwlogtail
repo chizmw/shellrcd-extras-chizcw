@@ -1,0 +1,21 @@
+#!/bin/sh
+
+function cwlogtail() {
+    LOG_GROUP="${1:?missing log group}"
+    LIMIT="${2:-20}"
+    aws logs get-log-events \
+        --log-group-name $LOG_GROUP \
+        --log-stream-name \
+            $(aws logs describe-log-streams \
+                --log-group-name $LOG_GROUP \
+                --order-by LastEventTime \
+                --descending \
+                --max-items 1 \
+                --query 'logStreams[].logStreamName' \
+                --output text \
+                    |head -n 1\
+             ) \
+         --query 'events[].message' \
+         --limit $LIMIT \
+            |jq -r '.[]'
+}
