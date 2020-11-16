@@ -88,6 +88,7 @@ plugins=(
     zsh-autosuggestions
     autojump
     gitignore
+    wakatime
 )
 
 source $ZSH/oh-my-zsh.sh
