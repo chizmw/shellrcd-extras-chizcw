@@ -16,7 +16,7 @@ else
         *.net-a-porter.com)
             git config --global user.email "chisel.wright@net-a-porter.com";
             ;;
-        macbook.zoopla|Chisels-MacBook-Air.local|*.dev.uk|chisel-zpg.local|*.eu-west-1.compute.internal)
+        macbook.zoopla|Chisels-MacBook-Pro.local|*.dev.uk|chisel-zpg.local|*.eu-west-1.compute.internal)
             git config --global user.email "chisel.malik-wright@zoopla.co.uk";
             ;;
         *)
