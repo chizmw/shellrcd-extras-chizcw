@@ -28,6 +28,10 @@ fi
 # 'lock' the update in case we're opening multiple terminals at the same
 # time
 if type "git" >/dev/null; then
+    # new in git ~1.30 ... a warning abour default branch
+    # let's start using main instead of master if we can
+    git config --global init.defaultBranch "main"
+
     # some common/handy aliases
     git config --global alias.br       "branch"
     git config --global alias.co       "checkout"
