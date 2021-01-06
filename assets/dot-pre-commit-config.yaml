@@ -1,0 +1,106 @@
+---
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+default_language_version:
+  python: python3.9
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: master  # or specific git tag
+    hooks:
+      # - id: bundler-audit
+      # - id: check-mailmap
+      # - id: fasterer
+      # - id: forbid-binary
+      # - id: forbid-space-in-indent
+      - id: git-check       # Configure in .gitattributes
+      - id: git-dirty       # Configure in .gitignore
+      - id: markdownlint    # Configure in .mdlrc
+      # - id: reek
+      # - id: require-ascii
+      # - id: rubocop
+      # - id: script-must-have-extension
+      # - id: script-must-not-have-extension
+      - id: shellcheck
+      # - id: shfmt
+
+  - repo: git://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.45.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.21.0    # or higher tag
+    hooks:
+      - id: yamllint
+        args: [--format, parsable, --strict]
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.7.1.1
+    hooks:
+      - id: shellcheck
+
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.0.11    # or specific tag
+    hooks:
+      - id: yamlfmt
+        args: [--offset, '2', --mapping, '2', --sequence, '4']
+
+  - repo: https://github.com/tekwizely/pre-commit-golang
+    rev: v0.8.0
+    hooks:
+      #
+      # Go Build
+      #
+      - id: go-build-mod
+      # - id: go-build-pkg
+      - id: go-build-repo-mod
+      # - id: go-build-repo-pkg
+      #
+      # Go Test
+      #
+      - id: go-test-mod
+      # - id: go-test-pkg
+      - id: go-test-repo-mod
+      # - id: go-test-repo-pkg
+      #
+      # Go Vet
+      #
+      - id: go-vet
+      - id: go-vet-mod
+      # - id: go-vet-pkg
+      - id: go-vet-repo-mod
+      # - id: go-vet-repo-pkg
+      #
+      # Formatters
+      #
+      - id: go-fmt
+      - id: go-imports          # replaces go-fmt
+      - id: go-returns          # replaces go-imports & go-fmt
+      #
+      # Style Checkers
+      #
+      - id: go-lint
+      - id: go-critic
+      #
+      # GolangCI-Lint
+      # - Fast Multi-Linter
+      # - Can be configured to replace MOST other hooks
+      # - Supports repo config file for configuration
+      # - https://github.com/golangci/golangci-lint
+      #
+      - id: golangci-lint
+      - id: golangci-lint-mod
+      # - id: golangci-lint-pkg
+      - id: golangci-lint-repo-mod
+      # - id: golangci-lint-repo-pkg
