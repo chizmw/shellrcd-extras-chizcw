@@ -24,7 +24,7 @@ if [ -f $topdir/.gitignore ]; then
     echo "WARN: $topdir/.gitignore already exists"
 else
     # now redirects somewhere else
-    curl -Ls -o $topdir/.gitignore https://gitignore.io/api/git,vim,node,ruby
+    curl -Ls -o $topdir/.gitignore https://gitignore.io/api/git,vim,node,ruby,go
     git add $topdir/.gitignore
 fi
 
@@ -32,7 +32,15 @@ fi
 if [ -f $topdir/.pre-commit-config.yaml ]; then
     echo "WARN: $topdir/.pre-commit-config.yaml already exists"
 else
-    pre-commit sample-config > $topdir/.pre-commit-config.yaml
+    # if we have a "preferred" config, use it, otherwise fall back to whatever
+    # the default is
+    if [ -f $HOME/.shellrc.d/assets/dot-pre-commit-config.yaml ]; then
+        echo "INFO: copying preferred .pre-commit-config.yaml"
+        cp $HOME/.shellrc.d/assets/dot-pre-commit-config.yaml $topdir/.pre-commit-config.yaml
+    else
+        echo "INFO: using pre-commit sample-config output"
+        pre-commit sample-config > $topdir/.pre-commit-config.yaml
+    fi
     git add $topdir/.pre-commit-config.yaml
     # make sure we actually use it
     pre-commit install
