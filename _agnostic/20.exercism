@@ -1,0 +1,9 @@
+#!sh
+if type exercism >/dev/null; then
+    unalias exercism-start  2>/dev/null
+    unalias exercism-submit 2>/dev/null
+    unalias exercism-commit 2>/dev/null
+    alias exercism-start='git add . && git commit --no-verify -m "Start: $(basename $PWD)"'
+    alias exercism-submit='exercism submit $(basename $(git diff --name-only))'
+    alias exercism-commit='git commit --no-verify -m "Submit: $(basename $(git diff --name-only))" -a'
+fi
