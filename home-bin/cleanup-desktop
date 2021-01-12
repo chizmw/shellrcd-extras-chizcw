@@ -8,5 +8,9 @@ case "$(uname)" in
         mv -f Screenshot*.png   $HOME/Pictures/Screenshots/ 2>/dev/null
 
         mv -f *.{jpg,png}       $HOME/Pictures/             2>/dev/null
+
+        mv -f *.{txt,pdf}       $HOME/Documents/            2>/dev/null
+
+        rm -rf *.{dmg,webp,p7b,log,pub}
         ;;
 esac
