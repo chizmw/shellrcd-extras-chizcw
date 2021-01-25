@@ -61,7 +61,7 @@ git commit -m 'Skeleton files'
 git tt
 
 if type code >/dev/null; then
-    code "$HOME/development/github/chiselwright/${reponame}"
+    code -g ./cmd/cli-client/main.go "$HOME/development/github/chiselwright/${reponame}"
 fi
 
 echo "# ${reponame} created in $HOME/development/github/chiselwright/${reponame}"
