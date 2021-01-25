@@ -1,0 +1,67 @@
+#!/bin/bash
+set -euo pipefail
+
+reponame="${1:?missing reponame}"
+
+[[ "go-" =~ ^$reponame ]] || reponame="go-${reponame}"
+
+mkdir -p "$HOME/development/github/chiselwright/${reponame}"
+cd       "$HOME/development/github/chiselwright/${reponame}"
+
+git-initial-commit
+
+go mod init github.com/chiselwright/$(basename $PWD)
+git add go.mod
+git commit -v --no-verify -m "go mod init github.com/chiselwright/$(basename $PWD)"
+
+mkdir -p cmd/cli-client
+cat <<EOF > cmd/cli-client/main.go
+package main
+
+import (
+	"fmt"
+
+	"github.com/chiselwright/go-${reponame/go-/}"
+)
+
+func main() {
+	// do nothing exciting ... for now
+	fmt.Println(${reponame/go-/}.Global)
+}
+EOF
+
+cat <<EOF > ${reponame/go-/}.go
+package ${reponame/go-/}
+
+// Global is just a thing you should delete
+var Global string = "Hello World"
+EOF
+
+cat <<EOF > README.md
+# ${reponame}
+
+## Installation
+
+\`\`\`sh
+go get github.com/chiselwright/${reponame}
+\`\`\`
+
+## cli-client
+
+You can experiment with the library by running:
+
+\`\`\`sh
+go run ./cmd/cli-client/main.go
+\`\`\`
+EOF
+
+git add .
+git commit -m 'Skeleton files'
+
+git tt
+
+if type code >/dev/null; then
+    code "$HOME/development/github/chiselwright/${reponame}"
+fi
+
+echo "# ${reponame} created in $HOME/development/github/chiselwright/${reponame}"
