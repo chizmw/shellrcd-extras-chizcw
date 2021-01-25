@@ -21,6 +21,7 @@ if [[ $cloneURL =~ $patZoopla ]]; then
         echo "# you can now: cd ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
     fi
 elif [[ $cloneURL =~ $patGithub ]]; then
+    rootDir="${rootDir}/github"
     if [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
         echo "# project already exists: ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
     else
