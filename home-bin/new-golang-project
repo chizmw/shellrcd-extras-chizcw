@@ -1,19 +1,32 @@
 #!/bin/bash
 set -euo pipefail
 
-reponame="${1:?missing reponame}"
+# grab $1 as the "original module name"
+origname="${1:?missing reponame}"
 
+# start with reponame as the origname, then prefix with go- if we don't have it
+reponame="${origname}"
 [[ "go-" =~ ^$reponame ]] || reponame="go-${reponame}"
+# and trimnam,e ir reponame without the go-prefix; useful for packages
+trimname="${reponame/go-/}"
 
-mkdir -p "$HOME/development/github/chiselwright/${reponame}"
-cd       "$HOME/development/github/chiselwright/${reponame}"
+# set a coupld of thins we maywish to make more configurable down the line
+pathPrefix="development/github/chiselwright"
+gomodPrefix="github.com/chiselwright/"
 
-git-initial-commit
 
-go mod init github.com/chiselwright/$(basename $PWD)
+mkdir -p "$HOME/${pathPrefix}/${reponame}"
+cd       "$HOME/${pathPrefix}/${reponame}"
+
+# run our magical little repo creator
+git initial-commit
+
+# initialise the go module
+go mod init ${gomodPrefix}${reponame}
 git add go.mod
-git commit -v --no-verify -m "go mod init github.com/chiselwright/$(basename $PWD)"
+git commit -v --no-verify -m "go mod init ${gomodPrefix}${reponame}"
 
+# create a shell of a main.go, to give us something to test with
 mkdir -p cmd/cli-client
 cat <<EOF > cmd/cli-client/main.go
 package main
@@ -21,17 +34,18 @@ package main
 import (
 	"fmt"
 
-	"github.com/chiselwright/go-${reponame/go-/}"
+	"${gomodPrefix}${reponame}"
 )
 
 func main() {
 	// do nothing exciting ... for now
-	fmt.Println(${reponame/go-/}.Global)
+	fmt.Println(${trimname}.Global)
 }
 EOF
 
-cat <<EOF > ${reponame/go-/}.go
-package ${reponame/go-/}
+# create a simple initial module for main.go to work
+cat <<EOF > ${trimname}.go
+package ${trimname}
 
 // Global is just a thing you should delete
 var Global string = "Hello World"
@@ -43,7 +57,7 @@ cat <<EOF > README.md
 ## Installation
 
 \`\`\`sh
-go get github.com/chiselwright/${reponame}
+go get ${gomodPrefix}${reponame}
 \`\`\`
 
 ## cli-client
@@ -61,7 +75,7 @@ git commit -m 'Skeleton files'
 git tt
 
 if type code >/dev/null; then
-    code -g ./cmd/cli-client/main.go "$HOME/development/github/chiselwright/${reponame}"
+    code -g ./cmd/cli-client/main.go "$HOME/${pathPrefix}/${reponame}"
 fi
 
-echo "# ${reponame} created in $HOME/development/github/chiselwright/${reponame}"
+echo "# ${reponame} created in $HOME/${pathPrefix}/${reponame}"
