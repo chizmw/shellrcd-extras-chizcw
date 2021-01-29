@@ -11,6 +11,6 @@ case "$(uname)" in
 
         mv -f *.{txt,pdf}       $HOME/Documents/            2>/dev/null
 
-        rm -rf *.{dmg,webp,p7b,log,pub}
+        rm -rf *.{dmg,webp,p7b,log,pub,zip}
         ;;
 esac
