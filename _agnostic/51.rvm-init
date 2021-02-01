@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ -f $HOME/.rvm/scripts/rvm ]; then
+    source $HOME/.rvm/scripts/rvm
+    rvm list
+fi
+
+# mac install: https://gist.github.com/denji/8706676
+# rvm install 2.7
+# rvm --default 2.7
