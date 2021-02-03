@@ -1,0 +1,4 @@
+#!/bin/sh
+#export RBENV_VERSION=2.6.3
+#jekyll serve --trace --config _config.yml,_config.localhost.yml --livereload $@
+bundle exec jekyll serve --trace --config _config.yml,_config.localhost.yml --livereload $@
