@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# we need both (vs)code and git
+if type "code" >/dev/null; then
+    if type "git" >/dev/null; then
+        alias code-this-repo='code "$(git rev-parse --show-toplevel)"'
+    fi
+fi
