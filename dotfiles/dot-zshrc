@@ -130,3 +130,6 @@ if [ -f ~/.shellrc.d/source-relevant-files -a -x ~/.shellrc.d/source-relevant-fi
 fi
 ## end of shellrcd block ##
 
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
