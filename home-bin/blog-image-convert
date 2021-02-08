@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ -z "$1" ]; then
+    echo "No image specified"
+    exit 1;
+fi
+
+image="$1"
+filename="${image%.*}"
+extension="${image##*.}"
+
+convert "${image}" -resize 50% -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG -colorspace RGB ${filename}@0,5x.${extension}
+convert "${image}" -resize 25% -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG -colorspace RGB ${filename}@0,25x.${extension}
+convert "${image}" -resize 12.5% -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG -colorspace RGB ${filename}@0,125x.${extension}
+
+cat <<EOF
+---
+image:
+  path:    /assets/img/blog/${filename}.${extension}
+  srcset:
+    1920w: /assets/img/blog/${filename}.${extension}
+    960w:  /assets/img/blog/${filename}@0,5x.${extension}
+    480w:  /assets/img/blog/${filename}@0,25x.${extension}
+EOF
