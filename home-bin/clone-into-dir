@@ -1,42 +1,35 @@
 #!/bin/bash
 set -euo pipefail
 
-rootDir=~/development
+# if you don't like ~/develpment simply:
+#   export CLONEINTO_ROOT=/path/to/your/preference
+rootDir=${CLONEINTO_ROOT:-~/development}
 cloneURL="${1:?missing git clone url}"
 
+# make sure the rootDir exists, and go there
+mkdir -p "${rootDir}"
 cd "${rootDir}"
 
-# e.g. git@gitlab.zoopla.co.uk:future-velocity/api-graphql.git
-patZoopla='git@gitlab.zoopla.co.uk:(.*)/(.*).git'
-# e.g. git@github.com:dragonsmith/slack-on-call-badge.git
-patGithub='git@github.com:(.*)/(.*).git'
+# anything that looks like a remote git repo
+pattern='^.+:(.*)/(.*).git$'
 
-if [[ $cloneURL =~ $patZoopla ]]; then
+if [[ "$cloneURL" =~ $pattern ]]; then
     if [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
         echo "# project already exists: ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
     else
-        echo "Cloning ${BASH_REMATCH[0]} into ${BASH_REMATCH[1]}"
+        echo "# cloning ${cloneURL} into ${rootDir}/${BASH_REMATCH[1]}…"
         mkdir -p "${BASH_REMATCH[1]}"
         git -C "${BASH_REMATCH[1]}" clone "${cloneURL}"
-        echo "# you can now: cd ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
-    fi
-elif [[ $cloneURL =~ $patGithub ]]; then
-    rootDir="${rootDir}/github"
-    if [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
-        echo "# project already exists: ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
-    else
-        mkdir -p "${rootDir}/github"
-        cd "${rootDir}/github"
-        mkdir -p "${BASH_REMATCH[1]}"
-        git -C "${BASH_REMATCH[1]}" clone "${cloneURL}"
-        echo "# you can now: cd $(pwd)/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+        echo "# repository cloned to: ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
     fi
 else
-    echo "Unsupported git uri: $cloneURL"
+    echo "# unsupported git uri: $cloneURL"
 fi
 
+# if we find VSCode, open the new repo
 if type code >/dev/null; then
     if [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
+        echo "# opening ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]} in VSCode…"
         code "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
     fi
 fi
