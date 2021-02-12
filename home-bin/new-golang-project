@@ -6,13 +6,15 @@ origname="${1:?missing reponame}"
 
 # start with reponame as the origname, then prefix with go- if we don't have it
 reponame="${origname}"
-[[ "go-" =~ ^$reponame ]] || reponame="go-${reponame}"
-# and trimnam,e ir reponame without the go-prefix; useful for packages
+[[ $reponame =~ ^go- ]] || reponame="go-${reponame}"
+# and trimname, get the reponame without the go-prefix; useful for packages
 trimname="${reponame/go-/}"
+# also, we don't want dashes!
+trimname="${trimname//-/}"
 
-# set a coupld of thins we maywish to make more configurable down the line
-pathPrefix="development/github/chiselwright"
-gomodPrefix="github.com/chiselwright/"
+# set a coupld of things we may wish to make more configurable down the line
+pathPrefix="${NEWGO_PATHPREFIX:-development/chiselwright}"
+gomodPrefix="${NEWGO_MODPREFIX:-github.com/chiselwright/}"
 
 
 mkdir -p "$HOME/${pathPrefix}/${reponame}"
@@ -34,7 +36,7 @@ package main
 import (
 	"fmt"
 
-	"${gomodPrefix}${reponame}"
+	${trimname} "${gomodPrefix}${reponame}"
 )
 
 func main() {
