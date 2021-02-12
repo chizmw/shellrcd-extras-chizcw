@@ -58,17 +58,17 @@ cat <<EOF > README.md
 
 ## Installation
 
-\`\`\`sh
+~~~sh
 go get ${gomodPrefix}${reponame}
-\`\`\`
+~~~
 
 ## cli-client
 
 You can experiment with the library by running:
 
-\`\`\`sh
+~~~sh
 go run ./cmd/cli-client/main.go
-\`\`\`
+~~~
 EOF
 
 git add .
