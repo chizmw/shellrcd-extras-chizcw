@@ -12,25 +12,42 @@ trimname="${reponame/go-/}"
 # also, we don't want dashes!
 trimname="${trimname//-/}"
 
-# set a coupld of things we may wish to make more configurable down the line
-pathPrefix="${NEWGO_PATHPREFIX:-development/chiselwright}"
-gomodPrefix="${NEWGO_MODPREFIX:-github.com/chiselwright/}"
+# set a couple of things we may wish to make more configurable down the line:
 
+## a github username (default: chiselwright)
+githubUsername="${GITHUB_USERNAME:-chiselwright}"
 
-mkdir -p "$HOME/${pathPrefix}/${reponame}"
-cd       "$HOME/${pathPrefix}/${reponame}"
+## the module name prefix (default: github.com/${githubuserName})
+gomodPrefix="${NEWGO_MODPREFIX:-github.com/${githubUsername}/}"
 
-# run our magical little repo creator
-git initial-commit
+## cloneRoot is the base for "development" checkouts (default: ~/development)
+### we use CLONEINTO_ROOT as that matches what we're using in git-initial-commit
+cloneRoot="${CLONEINTO_REPO:-~/development}"
 
-# initialise the go module
-go mod init ${gomodPrefix}${reponame}
-git add go.mod
-git commit -v --no-verify -m "go mod init ${gomodPrefix}${reponame}"
+## pathPrefix .. appends the username to the cloneRoot
+pathPrefix=${cloneRoot}/${githubUsername}
+# expand any ~
+# https://stackoverflow.com/questions/3963716/how-to-manually-expand-a-special-variable-ex-tilde-in-bash/27485157#27485157
+pathPrefix="${pathPrefix/#\~/$HOME}"
 
-# create a shell of a main.go, to give us something to test with
-mkdir -p cmd/cli-client
-cat <<EOF > cmd/cli-client/main.go
+# if we already exist, don't do anything
+if [ -d "${pathPrefix}/${reponame}" ]; then
+	echo "# repository dorectory '${pathPrefix}/${reponame}' already exists"
+else
+	mkdir -p "${pathPrefix}/${reponame}"
+	cd "${pathPrefix}/${reponame}"
+
+	# run our magical little repo creator
+	git initial-commit
+
+	# initialise the go module
+	go mod init ${gomodPrefix}${reponame}
+	git add go.mod
+	git commit -v --no-verify -m "go mod init ${gomodPrefix}${reponame}"
+
+	# create a shell of a main.go, to give us something to test with
+	mkdir -p cmd/cli-client
+	cat <<EOF >cmd/cli-client/main.go
 package main
 
 import (
@@ -45,15 +62,15 @@ func main() {
 }
 EOF
 
-# create a simple initial module for main.go to work
-cat <<EOF > ${trimname}.go
+	# create a simple initial module for main.go to work
+	cat <<EOF >${trimname}.go
 package ${trimname}
 
 // Global is just a thing you should delete
 var Global string = "Hello World"
 EOF
 
-cat <<EOF > README.md
+	cat <<EOF >README.md
 # ${reponame}
 
 ## Installation
@@ -71,13 +88,20 @@ go run ./cmd/cli-client/main.go
 ~~~
 EOF
 
-git add .
-git commit -m 'Skeleton files'
+	git add .
+	git commit -m 'Skeleton files'
 
-git tt
+	# if it were just me, I'd just use `git tt` here, but let's have a fallback
+	# for people that aren't me
+	git tt 2>/dev/null ||
+		git log --decorate \
+			--pretty=format:'%Cred%h %C(blue)[%G?] %Cgreen[%cr] %C(bold black)<%an>%Creset%C(yellow)%d %Creset %s%Creset' \
+			--date=relative \
+			-n 10
 
-if type code >/dev/null; then
-    code -g ./cmd/cli-client/main.go "$HOME/${pathPrefix}/${reponame}"
+	echo "# ${reponame} created in ${pathPrefix}/${reponame}"
 fi
 
-echo "# ${reponame} created in $HOME/${pathPrefix}/${reponame}"
+if type code >/dev/null; then
+	code -g ./cmd/cli-client/main.go "${pathPrefix}/${reponame}"
+fi
