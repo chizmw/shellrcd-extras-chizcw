@@ -89,6 +89,7 @@ plugins=(
     autojump
     gitignore
     wakatime
+    web-search
 )
 
 source $ZSH/oh-my-zsh.sh
