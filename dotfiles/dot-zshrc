@@ -85,7 +85,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=9"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     #ssh-agent; don't use this; it means we don't get the magic mac keychain behaviour
-    gpg-agent
+    #gpg-agent; doesn't seem to be playing nicely
     sudo
     zsh-autosuggestions
     autojump
