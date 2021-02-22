@@ -94,6 +94,9 @@ plugins=(
     web-search
 )
 
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
+zstyle :omz:plugins:ssh-agent agent-forwarding on
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
