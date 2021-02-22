@@ -41,6 +41,7 @@ if type "git" >/dev/null; then
     git config --global alias.st       "status"
     git config --global alias.staged   "diff --cached"
     git config --global alias.undo     "reset --soft HEAD^"
+    git config --global alias.cpick    "cherry-pick"
 
     git config --global alias.amendne  "commit --amend --no-edit"
     git config --global alias.amend    "commit --amend"
