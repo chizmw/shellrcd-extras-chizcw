@@ -84,7 +84,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=9"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    ssh-agent
+    #ssh-agent; don't use this; it means we don't get the magic mac keychain behaviour
     gpg-agent
     sudo
     zsh-autosuggestions
