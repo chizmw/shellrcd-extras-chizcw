@@ -16,7 +16,37 @@ setup_color() {
     fi
 }
 
+# stolen from install.sh
+# can't factor into a shared file as we would like to have the install.sh
+# standalone
+unset current_session_shellrc
+current_session_shellrc() {
+    current_shell="${SHELL##*/}"
+
+    case "${current_shell}" in
+        zsh)
+            current_rcfile=~/.zshrc
+            ;;
+
+        bash)
+            case "$(uname)" in
+                Darwin*)
+                    current_rcfile=~/.bash_profile
+                    ;;
+                *)
+                    current_rcfile=~/.bashrc
+                    ;;
+            esac
+            ;;
+
+        *)
+            current_rcfile="~/.unknownrc"
+            ;;
+    esac
+}
+
 show_updated_message() {
+    current_session_shellrc
     printf '%s' "$GREEN"
     cat <<"EOF"
            _             _    _                    _
@@ -33,7 +63,8 @@ EOF
     You are running from:
         ${branch}
 
-    Updates will activate in a new shell, or if you source your rcfile
+    Updates will activate in a new shell, or if you source your rcfile:
+        source ${current_rcfile}
 EOF
     printf '%s' "$RESET"
 }
