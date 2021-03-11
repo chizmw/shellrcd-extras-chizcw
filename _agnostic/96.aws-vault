@@ -70,7 +70,16 @@ else
             # file is `source`d
             # If you're cribbing from this file, you'll probably need to
             # add this to your own ~/.{bash,zhs}rc file
-            export AWS_VAULT_BACKEND=file
+            #export AWS_VAULT_BACKEND=file
+            # this seems to work better than the file based method
+            # these URLs might be useful:
+            # https://www.tomica.net/blog/2019/10/configuring-aws-vault-with-password-store/
+            # https://www.tomica.net/blog/2015/11/pass-password-manager/
+            # https://stackoverflow.com/a/34132924
+            # and in my case:
+            #  pass init 3885BB11
+            export AWS_VAULT_PASS_PREFIX=aws-vault
+            export AWS_VAULT_BACKEND=pass
             ;;
         *)
             echo "[aws-vault] not sure what flavour you are"
