@@ -33,7 +33,7 @@ else
 
                 if [ "${currentVersion}" = "v0.0.0" ]; then
                     echo "[aws-vault] running: brew cask install aws-vault"
-                    brew cask install aws-vault
+                    brew install cask aws-vault
                 else
                     echo "[aws-vault] running: brew cask upgrade aws-vault"
                     brew upgrade --cask aws-vault
