@@ -1,0 +1,7 @@
+#! sh
+# vim: filetype=sh
+if type "aws" >/dev/null 2>&1; then
+    export AWS_CLI_AUTO_PROMPT=on-partial
+    export AWS_DEFAULT_OUTPUT=json
+    export AWS_DEFAULT_REGION=eu-west-1
+fi
