@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# don't even bother if we don't have git :)
+if type "git" >/dev/null 2>&1; then
+    # https://stackoverflow.com/questions/1251681/git-mergetool-generates-unwanted-orig-files
+    git config --global mergetool.keepBackup false
+
+    # vscode
+    if type "code" >/dev/null 2>&1; then
+        git config --global merge.tool vscode
+        git config --global mergetool.vscode.cmd 'code --wait $MERGED'
+        git config --global diff.tool vscode
+        git config --global difftool.vscode.cmd 'code --wait --diff $LOCAL $REMOTE'
+
+    # vimdiff
+    elif type "vimdiff" >/dev/null 2>&1; then
+        git config --global merge.conflictstyle diff3
+        git config --global merge.tool "vimdiff"
+
+    # nothing found
+    else
+        git config --global --unset merge.conflictstyle diff3
+        git config --global --unset mergetool.prompt
+        git config --global --unset merge.tool
+    fi
+fi
