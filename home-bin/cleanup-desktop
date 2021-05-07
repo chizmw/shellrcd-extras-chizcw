@@ -7,7 +7,7 @@ case "$(uname)" in
         mkdir -p                $HOME/Pictures/Screenshots/
         mv -f Screenshot*.png   $HOME/Pictures/Screenshots/ 2>/dev/null
 
-        mv -f *.{jpg,png}       $HOME/Pictures/             2>/dev/null
+        mv -f *.{jpg,jpeg,png}  $HOME/Pictures/             2>/dev/null
 
         mv -f *.{txt,pdf}       $HOME/Documents/            2>/dev/null
 
