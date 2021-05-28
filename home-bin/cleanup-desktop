@@ -4,13 +4,18 @@ case "$(uname)" in
     Darwin*)
         cd $HOME/Desktop
 
-        mkdir -p                $HOME/Pictures/Screenshots/
-        mv -f Screenshot*.png   $HOME/Pictures/Screenshots/ 2>/dev/null
+        mkdir -p                        $HOME/Pictures/Screenshots/
+        mv -f Screenshot*.png           $HOME/Pictures/Screenshots/ 2>/dev/null
 
-        mv -f *.{jpg,jpeg,png}  $HOME/Pictures/             2>/dev/null
+        mv -f *.{jpg,jpeg,png}          $HOME/Pictures/             2>/dev/null
 
-        mv -f *.{txt,pdf}       $HOME/Documents/            2>/dev/null
+        mv -f *.{mov,avi}               $HOME/Movies/               2>/dev/null
 
-        rm -rf *.{dmg,webp,p7b,log,pub,zip}
+        mv -f *.{txt,pdf,docx,md}       $HOME/Documents/            2>/dev/null
+
+        rm -rf *.{dmg,webp,p7b,log,pub,zip,pkg,webloc,fwl}
+
+        find ~/Desktop -type d -maxdepth 1 -mindepth 1 -prune \
+            -exec mv "{}" ~/Documents \;
         ;;
 esac
