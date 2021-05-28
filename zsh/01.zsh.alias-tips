@@ -1,0 +1,12 @@
+#!/bin/sh
+
+(
+    cd ${ZSH_CUSTOM1:-$ZSH/custom}/plugins
+
+    if [ ! -d alias-tips ]; then
+        git clone https://github.com/djui/alias-tips.git
+        echo "[alias-tips] downloaded for the first time"
+        echo "[alias-tips] please ensure you add the following to .zshrc"
+        echo "[alias-tips]     plugins=(... alias-tips)"
+    fi
+)
