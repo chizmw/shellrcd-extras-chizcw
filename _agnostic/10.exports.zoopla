@@ -13,3 +13,7 @@ export TFROLE_FORCED='admin'
 # some useful aws sso "stuff"
 export USE_AWS_SSO='1'
 export AWS_SSO_PROFILE='chisel.malik-wright'
+
+# so we can use unwrapped terraform examples with minimum fuss
+export migrateProfile='chisel.malik-wright'
+export yourDeveloperProfile="${migrateProfile}"
