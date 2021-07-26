@@ -15,7 +15,7 @@ trimname="${trimname//-/}"
 # set a couple of things we may wish to make more configurable down the line:
 
 ## a github username (default: chiselwright)
-githubUsername="${GITHUB_USERNAME:-chiselwright}"
+githubUsername="${GITHUB_USERNAME:-chizmw}"
 
 ## the module name prefix (default: github.com/${githubuserName})
 gomodPrefix="${NEWGO_MODPREFIX:-github.com/${githubUsername}/}"
