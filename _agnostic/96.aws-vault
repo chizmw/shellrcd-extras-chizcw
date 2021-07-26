@@ -86,5 +86,7 @@ else
             #exit
     esac
 
+    # a couple of lazy aliases
+    alias avtf='aws-vault exec $yourDeveloperProfile -- terraform'
 
 fi
