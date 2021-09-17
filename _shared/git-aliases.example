@@ -43,6 +43,12 @@ if type "git" >/dev/null; then
     git config --global alias.undo     "reset --soft HEAD^"
     git config --global alias.cpick    "cherry-pick"
 
+    # https://aj.codes/post/branch-agnostic-git-aliases/
+    git config --global alias.default-branch    "!git symbolic-ref refs/remotes/origin/HEAD | cut -f4 -d/"
+    git config --global alias.sync              "!git fetch -p && git rebase origin/$(git default-branch)"
+    git config --global alias.cd                "!git checkout $(git default-branch)"
+
+
     git config --global alias.rebase-master-head '!git rebase -i `git merge-base master HEAD`'
     git config --global alias.rebase-main-head '!git rebase -i `git merge-base main HEAD`'
 
@@ -110,6 +116,10 @@ if type "git" >/dev/null; then
         git config --global commit.gpgsign  true
         git config --global push.gpgsign    false
     fi
+
+    # this can't be a shell command in a git alias (subshell!)
+    git-cdroot() { cd "$(git rev-parse --show-toplevel)"; }
+    alias gcr=git-cdroot
 
     echo "[git aliases and config updated]"
 fi
