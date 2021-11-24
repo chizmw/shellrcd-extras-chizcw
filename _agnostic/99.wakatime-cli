@@ -1,0 +1,5 @@
+# add my own bin to my path
+
+if [ -f /usr/local/bin/wakatime ]; then
+    export ZSH_WAKATIME_BIN=/usr/local/bin/wakatime
+fi
