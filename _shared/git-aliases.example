@@ -45,8 +45,8 @@ if type "git" >/dev/null; then
 
     # https://aj.codes/post/branch-agnostic-git-aliases/
     git config --global alias.default-branch    "!git symbolic-ref refs/remotes/origin/HEAD | cut -f4 -d/"
-    git config --global alias.sync              "!git fetch -p && git rebase origin/$(git default-branch)"
-    git config --global alias.cd                "!git checkout $(git default-branch)"
+    git config --global alias.sync              "!git fetch -p && git rebase origin/\$(git default-branch)"
+    git config --global alias.com               "!git checkout \$(git default-branch)"
 
 
     git config --global alias.rebase-master-head '!git rebase -i `git merge-base master HEAD`'
