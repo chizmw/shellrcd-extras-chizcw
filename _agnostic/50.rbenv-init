@@ -7,5 +7,4 @@ fi
 # https://stackoverflow.com/a/7522866
 if type "rbenv" >/dev/null; then
     eval "$(rbenv init -)"
-    export PATH=$HOME/.gem/ruby/2.7.0/bin:$PATH
 fi
