@@ -19,7 +19,7 @@ else
     if ! type "aws-vault" >/dev/null 2>&1; then
         currentVersion="v0.0.0"
     else
-        currentVersion="$(aws-vault --version 2>&1)"
+        currentVersion="v$(aws-vault --version 2>&1)"
     fi
 
     if [ "${requiredVersion}" != "${currentVersion}" ]; then
@@ -87,6 +87,7 @@ else
     esac
 
     # a couple of lazy aliases
+    export yourDeveloperProfile="${yourDeveloperProfile:-profile-name-missing}"
     alias avtf='aws-vault exec $yourDeveloperProfile -- terraform'
 
 fi
