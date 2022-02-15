@@ -1,1 +1,1 @@
-alias lazy-docker-build='docker build -t ${$(basename $PWD):l}:local .'
+alias lazy-docker-build='docker build -t ${$(basename $PWD):l}:lazy .'
