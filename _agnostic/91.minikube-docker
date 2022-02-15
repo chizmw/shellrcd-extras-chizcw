@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if type "minikube" >/dev/null 2>&1; then
+    eval "$(minikube docker-env)"
+
+    alias mk-clean='minikube delete && mk-start'
+    alias mk-start='minikube start --driver=virtualbox --container-runtime=docker --no-kubernetes --docker-opt="dns=\"8.8.8.8\"" --mount --mount-string="/Users:/Users,/tmp:/tmp,/var/folders:/var/folders,/Volumes:/Volumes,/private:/private"'
+    alias mk-stop='minikube stop'
+    alias mk-pause='minikube pause'
+    alias mk-unpause='minikube unpause'
+fi
