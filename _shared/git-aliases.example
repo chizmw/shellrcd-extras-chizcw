@@ -48,6 +48,8 @@ if type "git" >/dev/null; then
     git config --global alias.sync              "!git fetch -p && git rebase origin/\$(git default-branch)"
     git config --global alias.com               "!git checkout \$(git default-branch)"
 
+    git config --global alias.comsync           "!git com && git sync && git tree -n 5"
+
 
     git config --global alias.rebase-master-head '!git rebase -i `git merge-base master HEAD`'
     git config --global alias.rebase-main-head '!git rebase -i `git merge-base main HEAD`'
