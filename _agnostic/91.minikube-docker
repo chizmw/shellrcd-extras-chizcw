@@ -1,6 +1,10 @@
 #!/bin/bash
 
-if type "minikube" >/dev/null 2>&1; then
+# skip if we seem to have Rancher Desktop installed
+# this script freezes if it's running
+if [ -d "/Applications/Rancher Desktop.app" ]; then
+    echo "Looks like we're under Rancher's control"
+elif type "minikube" >/dev/null 2>&1; then
     eval "$(minikube docker-env)"
 
     alias mk-clean='minikube delete && mk-start'
