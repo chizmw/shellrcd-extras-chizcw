@@ -7,13 +7,18 @@ else
 
     # from: https://gist.github.com/lukechilds/a83e1d7127b78fef38c2914c4ececc3c
     get_latest_release() {
-        curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
+        curl --silent -H "Authorization: token ${GITHUB_API_TOKEN}" \
+            "https://api.github.com/repos/$1/releases/latest" |           # Get latest release from GitHub api
             grep '"tag_name":' |                                          # Get tag line
             sed -E 's/.*"([^"]+)".*/\1/'                                  # Pluck JSON value
     }
 
     # required version, so we know if we should try to upgrade
     requiredVersion="$(get_latest_release 99designs/aws-vault)"
+    if [ -z "${requiredVersion}" ]; then
+        echo "[aws-vault] failed to fetch latest version"
+        exit 2
+    fi
 
     # if we don't have it installed
     if ! type "aws-vault" >/dev/null 2>&1; then
@@ -36,6 +41,7 @@ else
                 brew install cask aws-vault
             else
                 echo "[aws-vault] running: brew cask upgrade aws-vault"
+                echo "[aws-vault] installed (${currentVersion}) != desired (${requiredVersion})"
                 brew upgrade --cask aws-vault
             fi
             ;;
