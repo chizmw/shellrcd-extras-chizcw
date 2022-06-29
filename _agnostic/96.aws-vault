@@ -17,7 +17,7 @@ else
     requiredVersion="$(get_latest_release 99designs/aws-vault)"
     if [ -z "${requiredVersion}" ]; then
         echo "[aws-vault] failed to fetch latest version"
-        exit 2
+        #exit 2
     fi
 
     # if we don't have it installed
