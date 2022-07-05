@@ -31,6 +31,7 @@ for x in "${files[@]}"; do
   test -f "$x" || continue
   test -x "$x" || continue
   if [ -n "$SHELLRCD_DEBUG" ]; then echo "[DEBUG][${x//.\//}] sourcing file..."; fi
+  #source "$x" >/dev/null 3>&2
   source "$x"
 done
 
