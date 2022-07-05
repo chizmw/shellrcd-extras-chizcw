@@ -20,7 +20,7 @@ fi
 files=()
 
 # check places we expect to find things
-for maybe_subdir in _agnostic "${shell}" _PRIVATE; do
+for maybe_subdir in _PRIVATE _agnostic "${shell}"; do
     if [ -d "${shellrcddir}/${maybe_subdir}" ]; then
         files+=(${shellrcddir}/${maybe_subdir}/*)
     fi
