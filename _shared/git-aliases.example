@@ -43,8 +43,13 @@ if type "git" >/dev/null; then
     git config --global alias.undo     "reset --soft HEAD^"
     git config --global alias.cpick    "cherry-pick"
 
+    git config --global push.followTags true
+
     # https://aj.codes/post/branch-agnostic-git-aliases/
-    git config --global alias.default-branch    "!git symbolic-ref refs/remotes/origin/HEAD | cut -f4 -d/"
+    # this stopped working; not sure why exactly
+    #git config --global alias.default-branch    "!git symbolic-ref refs/remotes/origin/HEAD | cut -f4 -d/"
+    # slightly clunkier but seems to get the job done
+    #git config --global alias.default-branch    "!bash -c ( set -- `git ls-remote --symref origin HEAD` test $1 = ref: && echo $2 ) | awk -F/ '{ print $NF }'"
     git config --global alias.sync              "!git fetch -p && git rebase origin/\$(git default-branch)"
     git config --global alias.com               "!git checkout \$(git default-branch)"
 

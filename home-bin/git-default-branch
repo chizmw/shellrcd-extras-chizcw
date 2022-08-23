@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# vim: filetype=sh
+
+set -e   # exit if any command fails
+
+( set -- `git ls-remote --symref origin HEAD` test $1 = ref: && echo $2 ) | awk -F/ '{ print $NF }'
