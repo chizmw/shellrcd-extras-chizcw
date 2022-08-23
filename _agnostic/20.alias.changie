@@ -1,0 +1,4 @@
+# vim: syntax=sh
+if type "changie" >/dev/null; then
+    alias add-change-entry='git log --pretty=format:%s -n1 |pbcopy && changie new'
+fi
