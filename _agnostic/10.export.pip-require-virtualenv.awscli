@@ -1,0 +1,5 @@
+#! sh
+# vim: filetype=sh
+if type "pip" >/dev/null 2>&1; then
+    export PIP_REQUIRE_VIRTUALENV=1
+fi
