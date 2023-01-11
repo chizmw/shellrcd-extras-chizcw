@@ -3,7 +3,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 
 default_language_version:
-  python: python3.9
+  python: python3
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -21,6 +21,7 @@ repos:
     rev: v0.31.1
     hooks:
       - id: markdownlint
+        args: [--ignore, .changes/*md, --ignore, CHANGELOG.md]
 
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: 2.1.6
