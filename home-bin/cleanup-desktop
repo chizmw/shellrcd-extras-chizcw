@@ -11,6 +11,8 @@ case "$(uname)" in
 
         mv -f *.{mov,avi,mp4}           $HOME/Movies/               2>/dev/null
 
+        mv -f *.{mp3,ogg}               $HOME/Music/                2>/dev/null
+
         mv -f *.{txt,pdf,docx,md,xlsx}  $HOME/Documents/            2>/dev/null
         mv -f *.json                    $HOME/Documents/            2>/dev/null
 
@@ -19,6 +21,7 @@ case "$(uname)" in
         mv -f *.{gz,,pat,zip}           $HOME/Documents/Archives/   2>/dev/null
 
         rm -rf *.{dmg,webp,p7b,log,pub,zip,pkg,webloc,fwl,html,ics,csv,yml}
+        rm -rf *.{tar,xml,gz,avif,tgz}
 
         find ~/Desktop -type d -maxdepth 1 -mindepth 1 -prune \
             -exec mv "{}" ~/Documents \;
