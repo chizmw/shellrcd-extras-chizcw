@@ -94,6 +94,7 @@ plugins=(
     gitignore
     wakatime
     web-search
+    python
 )
 
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
@@ -137,6 +138,12 @@ if [ -f ~/.shellrc.d/source-relevant-files -a -x ~/.shellrc.d/source-relevant-fi
     source ~/.shellrc.d/source-relevant-files
 fi
 ## end of shellrcd block ##
+
+# The next line updates PATH for the Google Cloud SDK.
+#if [ -f '/Users/chisel/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/chisel/Desktop/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+#if [ -f '/Users/chisel/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/chisel/Desktop/google-cloud-sdk/completion.zsh.inc'; fi
 
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
