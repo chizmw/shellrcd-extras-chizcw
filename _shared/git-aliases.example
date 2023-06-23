@@ -1,28 +1,28 @@
 # vim: ts=8 sts=4 et sw=4 sr sta syntax=sh
 # lifted from tmux-continuum
 acquire_lock() {
-        # Sometimes tmux starts multiple saves in parallel. We want only one
-        # save to be running, otherwise we can get corrupted saved state.
-        #local lockdir_prefix="/tmp/shellrcd-gitaliases-$(current_tmux_server_pid)-lock-"
-        local lockdir_prefix="/tmp/shellrcd-gitaliases-lock-"
-        # The following implements a lock that auto-expires after 100...200s.
-        local lock_generation=$((`date +%s` / 100))
-        local lockdir1="${lockdir_prefix}${lock_generation}"
-        local lockdir2="${lockdir_prefix}$(($lock_generation + 1))"
-        if mkdir "$lockdir1" 2>/dev/null; then
-                trap "rmdir "$lockdir1"" EXIT
-                if mkdir "$lockdir2"; then
-                        trap "rmdir "$lockdir1" "$lockdir2"" EXIT
-                        return 0
-                fi
+    # Sometimes tmux starts multiple saves in parallel. We want only one
+    # save to be running, otherwise we can get corrupted saved state.
+    #local lockdir_prefix="/tmp/shellrcd-gitaliases-$(current_tmux_server_pid)-lock-"
+    local lockdir_prefix="/tmp/shellrcd-gitaliases-lock-"
+    # The following implements a lock that auto-expires after 100...200s.
+    local lock_generation=$(($(date +%s) / 100))
+    local lockdir1="${lockdir_prefix}${lock_generation}"
+    local lockdir2="${lockdir_prefix}$(($lock_generation + 1))"
+    if mkdir "$lockdir1" 2>/dev/null; then
+        trap "rmdir "$lockdir1"" EXIT
+        if mkdir "$lockdir2"; then
+            trap "rmdir "$lockdir1" "$lockdir2"" EXIT
+            return 0
         fi
-        return 1  # Someone else has the lock.
+    fi
+    return 1 # Someone else has the lock.
 }
 
 # exit immediately if we can't acquire the lockfile
 if ! acquire_lock; then
-    echo "[Another terminal is already updating the aliases. Aborting in this terminal.]";
-    return;
+    echo "[Another terminal is already updating the aliases. Aborting in this terminal.]"
+    return
 fi
 
 # 'lock' the update in case we're opening multiple terminals at the same
@@ -33,15 +33,15 @@ if type "git" >/dev/null; then
     git config --global init.defaultBranch "main"
 
     # some common/handy aliases
-    git config --global alias.br       "branch"
-    git config --global alias.co       "checkout"
-    git config --global alias.fpush    "push --force-with-lease"
-    git config --global alias.pr       "pull --rebase --prune"
-    git config --global alias.praise   "blame"
-    git config --global alias.st       "status"
-    git config --global alias.staged   "diff --cached"
-    git config --global alias.undo     "reset --soft HEAD^"
-    git config --global alias.cpick    "cherry-pick"
+    git config --global alias.br "branch"
+    git config --global alias.co "checkout"
+    git config --global alias.fpush "push --force-with-lease"
+    git config --global alias.pr "pull --rebase --prune"
+    git config --global alias.praise "blame"
+    git config --global alias.st "status"
+    git config --global alias.staged "diff --cached"
+    git config --global alias.undo "reset --soft HEAD^"
+    git config --global alias.cpick "cherry-pick"
 
     git config --global push.followTags true
 
@@ -50,29 +50,33 @@ if type "git" >/dev/null; then
     #git config --global alias.default-branch    "!git symbolic-ref refs/remotes/origin/HEAD | cut -f4 -d/"
     # slightly clunkier but seems to get the job done
     #git config --global alias.default-branch    "!bash -c ( set -- `git ls-remote --symref origin HEAD` test $1 = ref: && echo $2 ) | awk -F/ '{ print $NF }'"
-    git config --global alias.sync              "!git fetch -p && git rebase origin/\$(git default-branch)"
-    git config --global alias.com               "!git checkout \$(git default-branch)"
+    git config --global alias.sync "!git fetch -p && git rebase origin/\$(git default-branch)"
+    git config --global alias.com "!git checkout \$(git default-branch)"
 
-    git config --global alias.comsync           "!git com && git sync && git pull --tags --force && git tree -n 5"
+    git config --global alias.comsync "!git com && git sync && git pull --tags --force && git tree -n 5"
+    git config --global alias.rbim "!git rebase -i \$(git default-branch)"
+    git config --global alias.rbm "!git rebase \$(git default-branch)"
 
+    git config --global alias.amendne "commit --amend --no-edit"
+    git config --global alias.amend "commit --amend"
 
-    git config --global alias.rebase-master-head '!git rebase -i `git merge-base master HEAD`'
-    git config --global alias.rebase-main-head '!git rebase -i `git merge-base main HEAD`'
-
-    git config --global alias.amendne  "commit --amend --no-edit"
-    git config --global alias.amend    "commit --amend"
-
-    git config --global alias.cdroot   '!cd "$(git rev-parse --show-toplevel)"'
+    # ignore shellcheck warning about expressions in single quotes
+    # shellcheck disable=SC2016
+    git config --global alias.cdroot '!cd "$(git rev-parse --show-toplevel)"'
 
     # if we support the option, this is a nicer 'st'
-    if [ $(git status -h 2>&1|grep -c ' --branch ') -gt 0 ]; then
-        git config --global alias.st        "status -bs"
+    if [ $(git status -h 2>&1 | grep -c ' --branch ') -gt 0 ]; then
+        git config --global alias.st "status -bs"
     fi
 
     # nice one-line log output
     git config --global alias.tree "log --decorate --topo-order --graph --pretty=format:'%Cred%h %C(blue)[%G?] %Cgreen[%cr] %C(bold black)<%an>%Creset%C(yellow)%d %Creset %s%Creset' --date=relative"
-    # a brief summary
-    git config --global alias.tt   "log --decorate --topo-order --graph --pretty=format:'%Cred%h %C(blue)[%G?] %Cgreen[%cr] %C(bold black)<%an>%Creset%C(yellow)%d %Creset %s%Creset' --date=relative -n 10"
+    # a brief summary, stopping at main~1
+    # ignore shellcheck warning about expressions in single quotes
+    # shellcheck disable=SC2016
+    git config --global alias.tt '!git log --decorate --topo-order --graph --pretty=format:"%Cred%h %C(blue)[%G?] %Cgreen[%cr] %C(bold black)<%an>%Creset%C(yellow)%d %Creset %s%Creset" --date=relative $(git default-branch)~1..HEAD'
+    # a brief summary, showing last 7
+    git config --global alias.ttt "log --decorate --topo-order --graph --pretty=format:'%Cred%h %C(blue)[%G?] %Cgreen[%cr] %C(bold black)<%an>%Creset%C(yellow)%d %Creset %s%Creset' --date=relative -n 7"
 
     # some sensible options
     ## https://thoughtbot.com/blog/autosquashing-git-commits
@@ -90,22 +94,22 @@ if type "git" >/dev/null; then
     git config --global merge.ff no
 
     # from http://mikewest.org/2011/04/a-quick-git-vim-workflow-tip
-    git config --global alias.fshow    "! sh -c 'git show --pretty=\"format:\" --name-only \$1 | grep -v \"^$\" | uniq | sed -e \"s#^#\`git rev-parse --show-toplevel\`/#\"' -"
+    git config --global alias.fshow "! sh -c 'git show --pretty=\"format:\" --name-only \$1 | grep -v \"^$\" | uniq | sed -e \"s#^#\`git rev-parse --show-toplevel\`/#\"' -"
     # use 'fshow' to edit files in recent commit(s)
     # without a range will edit the files in your most recent commit
-    git config --global alias.edit     "! sh -c '\$EDITOR \`git fshow \$1\`' -"
+    git config --global alias.edit "! sh -c '\$EDITOR \`git fshow \$1\`' -"
 
     # I took a tweet from Ovid and made these
     # https://twitter.com/OvidPerl/status/1266262204342366210
-    git config --global alias.edit-last     "! sh -c '\${EDITOR:-vim} \$(git diff --name-only HEAD~1..HEAD)'"
-    git config --global alias.edit-changed  "! sh -c '\${EDITOR:-vim} \$(git ls-files -m)'"
+    git config --global alias.edit-last "! sh -c '\${EDITOR:-vim} \$(git diff --name-only HEAD~1..HEAD)'"
+    git config --global alias.edit-changed "! sh -c '\${EDITOR:-vim} \$(git ls-files -m)'"
 
     # make git do "sensible things with colours"
-    git config --global color.branch      auto
-    git config --global color.diff        auto
+    git config --global color.branch auto
+    git config --global color.diff auto
     git config --global color.interactive auto
-    git config --global color.status      auto
-    git config --global color.ui          auto
+    git config --global color.status auto
+    git config --global color.ui auto
 
     # make whitespace changes more obvious (esp. at eol); https://stackoverflow.com/a/5259137
     git config --global diff.wsErrorHighlight all
@@ -118,10 +122,27 @@ if type "git" >/dev/null; then
         # https://gist.github.com/webframp/75c680930b6b2caba9a1be6ec23477c1
         # both gitlab and github seem to not like push.gpgsign, so we ensure that's
         # explicitly set to false
-        git config --global gpg.program     gpg
+        git config --global gpg.program gpg
         git config --global user.signingkey "${GIT_SIGNINGKEY_ID}"
-        git config --global commit.gpgsign  true
-        git config --global push.gpgsign    false
+        git config --global commit.gpgsign true
+        git config --global push.gpgsign false
+    fi
+
+    # if we have VSCode Insiders installed, use that for mergetool, otherwise
+    # use VSCode if we have it
+    # clunky approach, but we don't have to think about shell escaping
+    if [ -x "$(command -v code-insiders)" ]; then
+        git config --global merge.tool vscode-insiders
+        git config --global mergetool.vscode-insiders.cmd "code-insiders --wait \$MERGED"
+        git config --global mergetool.vscode-insiders.trustExitCode true
+        # set the sequence.editor to vscode-insiders too
+        git config --global sequence.editor 'code-insiders --wait'
+    elif [ -x "$(command -v code)" ]; then
+        git config --global merge.tool vscode
+        git config --global mergetool.vscode.cmd "code --wait \$MERGED"
+        git config --global mergetool.vscode.trustExitCode true
+        # set the sequence.editor to vscode too
+        git config --global sequence.editor 'code --wait'
     fi
 
     # this can't be a shell command in a git alias (subshell!)
