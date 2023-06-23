@@ -1,0 +1,5 @@
+# vim: filetype=sh
+
+if type "lazygit" >/dev/null; then
+    alias lgit=lazygit
+fi
