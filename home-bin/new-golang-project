@@ -41,7 +41,7 @@ else
 	git initial-commit
 
 	# initialise the go module
-	go mod init ${gomodPrefix}${reponame}
+	go mod init "${gomodPrefix}${reponame}"
 	git add go.mod
 	git commit -v --no-verify -m "go mod init ${gomodPrefix}${reponame}"
 
@@ -53,7 +53,7 @@ package main
 import (
 	"fmt"
 
-	${trimname} "${gomodPrefix}${reponame}"
+	${trimname} "${gomodPrefix}${reponame}/${trimname}"
 )
 
 func main() {
@@ -63,7 +63,8 @@ func main() {
 EOF
 
 	# create a simple initial module for main.go to work
-	cat <<EOF >${trimname}.go
+	mkdir -p "${trimname}"
+	cat <<EOF >"${trimname}/main.go"
 package ${trimname}
 
 // Global is just a thing you should delete
