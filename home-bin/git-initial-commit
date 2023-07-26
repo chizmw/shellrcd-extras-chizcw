@@ -28,6 +28,12 @@ else
     git add "$topdir/.gitignore"
 fi
 
+# drop in a yamllint config
+if [ ! -f "$topdir/.prettierrc" ]; then
+    cp "$HOME/.shellrc.d/assets/dot-yamllint" "$topdir/.yamllint"
+    git add "$topdir/.yamllint"
+fi
+
 # drop in a prettier config (quote behaviour in vscode/yaml formatting)
 if [ ! -f "$topdir/.prettierrc" ]; then
     cp "$HOME/.shellrc.d/assets/dot-prettierrc" "$topdir/.prettierrc"
