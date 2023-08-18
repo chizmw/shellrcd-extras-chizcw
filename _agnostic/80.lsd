@@ -1,0 +1,9 @@
+# https://github.com/lsd-rs/lsd
+if type "lsd" >/dev/null; then
+    alias ls="$(which lsd)"
+    #alias ll='ls -lart'
+    #alias lg='ls --gs'
+    #alias llg='ls --gs -lart'
+else
+    echo "[INFO] consider installing lsd; https://github.com/lsd-rs/lsd"
+fi
