@@ -1,0 +1,27 @@
+#!/usr/bin/env zsh
+# https://stackoverflow.com/a/7522866
+if ! type "yarn" >/dev/null 2>&1; then
+    # no aws; nothing to do
+    true
+else
+    chpwd_aws_changeset() {
+        # if LOG_DEBUG is set, print out the function name
+        [[ -n "${LOG_DEBUG:-}" ]] && echo "called: chpwd_aws_changeset"
+        # if we have a changesets directory
+        if [[ -d .changeset ]]; then
+            echo -e "\033[0;32m\xE2\x9C\x94 found .changeset/ .. creating yc()\033[0m"
+            yc() {
+                # ignore 'unreachable' shellcheck warning
+                # shellcheck disable=SC2317
+                git log --pretty=format:%s -n1 | pbcopy && yarn changeset
+            }
+        fi
+    }
+    # use chpwd_functions to run this on every directory change (zsh only!)
+    ## make sure we're running in zsh
+    if [ -n "${ZSH_VERSION}" ]; then
+        chpwd_functions+=(chpwd_aws_changeset)
+        # also manually call the function so we have it run at startup
+        chpwd_aws_changeset
+    fi
+fi
