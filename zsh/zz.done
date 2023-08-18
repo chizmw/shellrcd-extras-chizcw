@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+echo -e "\033[0;32m\xE2\x9C\x94 shellrc.d init (zsh) complete\033[0m"
