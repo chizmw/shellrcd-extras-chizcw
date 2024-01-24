@@ -1,0 +1,42 @@
+#!/usr/bin/env zsh
+# https://stackoverflow.com/a/7522866
+
+if ! type "aws-vault" >/dev/null 2>&1; then
+    # no aws; nothing to do
+    echo "[aws-vault] not installed; skipping"
+    true
+else
+    echo "[aws-vault] installed; setting up chpwd_avtf_chdir"
+    function chpwd_avtf_chdir() {
+        # if LOG_DEBUG is set, print out the function name
+        [[ -n "${LOG_DEBUG:-}" ]] && echo "called: chpwd_avtf_chdir"
+        # if we have a changesets directory
+        if [[ -d terraform ]]; then
+            echo -e "\033[0;32m\xE2\x9C\x94 found terraform/ .. creating avtf()\033[0m"
+            export AVTF_TERRAFORM_DIR="$(pwd)/terraform"
+            # this makes the magic work with p10k
+            export TF_DATA_DIR=$AVTF_TERRAFORM_DIR/.terraform
+            unalias avtf 2>/dev/null || true
+            unset avtf 2>/dev/null || true
+            function avtf() {
+                # ignore 'unreachable' shellcheck warning
+                # shellcheck disable=SC2317
+                aws-vault exec $yourDeveloperProfile -- terraform -chdir="${AVTF_TERRAFORM_DIR}" "$@"
+            }
+
+            unset -f terraform 2>/dev/null || true
+            function tf() {
+                # ignore 'unreachable' shellcheck warning
+                # shellcheck disable=SC2317
+                $(which terraform) -chdir="${AVTF_TERRAFORM_DIR}" "$@"
+            }
+        fi
+    }
+    # use chpwd_functions to run this on every directory change (zsh only!)
+    ## make sure we're running in zsh
+    if [ -n "${ZSH_VERSION}" ]; then
+        chpwd_functions+=(chpwd_avtf_chdir)
+        # also manually call the function so we have it run at startup
+        chpwd_avtf_chdir
+    fi
+fi
