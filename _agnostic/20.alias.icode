@@ -1,5 +1,5 @@
 # vim: syntax=sh
-if type "code-insiders" >/dev/null; then
+if type "Xcode-insiders" >/dev/null; then
     alias icode=code-insiders
     # also make sure `code` starts us up
     alias code=code-insiders
