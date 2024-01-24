@@ -24,7 +24,7 @@ if [ -f "$topdir/.gitignore" ]; then
     echo "WARN: $topdir/.gitignore already exists"
 else
     # now redirects somewhere else
-    curl -Ls -o "$topdir/.gitignore" https://gitignore.io/api/git,vim,node,ruby,go,terraform
+    curl -Ls -o "$topdir/.gitignore" https://gitignore.io/api/git,vim,node,ruby,go,terraform,python
     git add "$topdir/.gitignore"
 fi
 
