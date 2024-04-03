@@ -1,0 +1,4 @@
+# if we're running on MacOs
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    ssh-add --apple-load-keychain
+fi
