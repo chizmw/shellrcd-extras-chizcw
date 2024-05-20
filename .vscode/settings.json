@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "**/_agnostic/*": "shellscript",
+    "**/_shared/*": "shellscript",
+    "**/zsh/*": "shellscript"
+  }
+}
