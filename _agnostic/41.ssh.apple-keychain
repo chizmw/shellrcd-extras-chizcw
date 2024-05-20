@@ -1,4 +1,10 @@
 # if we're running on MacOs
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    ssh-add --apple-load-keychain
+    # if we haven't already loaded identities
+    _loaded_count="$(ssh-add -l |wc -l)"
+    echo "Currently loaded ${_loaded_count} SSH identities"
+    if [[ $_loaded_count -eq 0 ]]; then
+        echo "Adding SSH identities…"
+        ssh-add --apple-load-keychain
+    fi
 fi
