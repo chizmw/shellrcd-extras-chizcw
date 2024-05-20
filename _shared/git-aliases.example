@@ -128,6 +128,11 @@ if type "git" >/dev/null; then
                 git config --global push.gpgsign false
         fi
 
+        # a helper/template for git commit messages
+        if [ -f "$HOME/.git_message" ]; then
+                git config --global commit.template "$HOME/.git_message"
+        fi
+
         # if we have VSCode Insiders installed, use that for mergetool, otherwise
         # use VSCode if we have it
         # clunky approach, but we don't have to think about shell escaping
