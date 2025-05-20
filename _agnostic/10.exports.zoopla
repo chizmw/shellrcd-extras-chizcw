@@ -7,12 +7,12 @@ export PROJECT_UPDATE_FF_ONLY='1'
 export TMP_ROOT='/tmp'
 
 # terraform stuff
-export TF_VAR_target_role='zoopla/account/PlatAdmins'
-export TFROLE_FORCED='admin'
+#export TF_VAR_target_role='zoopla/account/PlatAdmins'
+#export TFROLE_FORCED='admin'
 
 # some useful aws sso "stuff"
-export USE_AWS_SSO='1'
-export AWS_SSO_PROFILE='sso.zooplalegacy.sreadmin'
+#export USE_AWS_SSO='1'
+#export AWS_SSO_PROFILE='sso.zooplalegacy.sreadmin'
 
 # so we can use unwrapped terraform examples with minimum fuss
 export migrateProfile='sso.zooplalegacy.sreadmin'
