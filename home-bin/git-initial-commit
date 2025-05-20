@@ -47,6 +47,8 @@ else
     # if we have a "preferred" config, use it, otherwise fall back to whatever
     # the default is
     if [ -f "$HOME/.shellrc.d/assets/dot-pre-commit-config.yaml" ]; then
+        echo "INFO: updating source configuration for pre-commit"
+        pre-commit autoupdate --config "$HOME/.shellrc.d/assets/dot-pre-commit-config.yaml"
         echo "INFO: copying preferred .pre-commit-config.yaml"
         cp "$HOME/.shellrc.d/assets/dot-pre-commit-config.yaml" "$topdir/.pre-commit-config.yaml"
     else
