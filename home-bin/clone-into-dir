@@ -6,6 +6,19 @@ set -euo pipefail
 rootDir=${CLONEINTO_ROOT:-~/development}
 cloneURL="${1:?missing git clone url}"
 
+# determine which editor to use
+# priority: command line arg > env var > code-insiders > code
+editor=""
+if [ -n "${2:-}" ]; then
+    editor="$2"
+elif [ -n "${CLONE_INTO_DIR_EDITOR:-}" ]; then
+    editor="$CLONE_INTO_DIR_EDITOR"
+elif type code-insiders 2>/dev/null; then
+    editor="code-insiders"
+elif type code 2>/dev/null; then
+    editor="code"
+fi
+
 # make sure the rootDir exists, and go there
 mkdir -p "${rootDir}"
 cd "${rootDir}"
@@ -26,16 +39,8 @@ else
     echo "# unsupported git uri: $cloneURL"
 fi
 
-# if we find VSCode INsiders, open the new repo in is
-if type code-insiders 2>/dev/null; then
-    if [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
-        echo "# opening ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]} in VSCode…"
-        code-insiders "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
-    fi
-# if we find VSCode, open the new repo
-elif type code 2>/dev/null; then
-    if [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
-        echo "# opening ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]} in VSCode…"
-        code "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
-    fi
+# if we have an editor selected, open the new repo
+if [ -n "$editor" ] && [ -d "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}" ]; then
+    echo "# opening ${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]} in ${editor}…"
+    "$editor" "${rootDir}/${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
 fi
