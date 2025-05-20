@@ -111,6 +111,11 @@ if type "git" >/dev/null; then
         git config --global color.status auto
         git config --global color.ui auto
 
+        # alias to delete local branches that have been merged
+        # https://dillionmegida.com/p/delete-outdated-branches/
+        git config --global alias.delete-local-merged "!git fetch && git branch --merged | egrep -v 'master|dev|main|staging'  | xargs git branch -d"
+
+
         # make whitespace changes more obvious (esp. at eol); https://stackoverflow.com/a/5259137
         git config --global diff.wsErrorHighlight all
 
