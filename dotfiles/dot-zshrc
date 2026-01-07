@@ -1,5 +1,36 @@
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+# Simplify prompt for Cursor
+# We can check for the $CURSOR_TRACE_ID environment variable. If it is set, we
+# can simplify the prompt.
+
+if [[ -f ".simplify-for-cursor" ]]; then
+  if [[ -n "$CURSOR_TRACE_ID" ]]; then
+    # This part is only active when a Cursor AI agent is running a command.
+    export PS1="zsh> "
+
+    # Shell integration markers to fix the "stuck terminal" issue.
+    function preexec_cursor_hook() {
+      print -Pn "\n\033]133;C\007"
+    }
+
+    function precmd_cursor_hook() {
+      print -Pn "\n\033]133;D;0\007"
+    }
+
+    autoload -U add-zsh-hook
+    add-zsh-hook preexec preexec_cursor_hook
+    add-zsh-hook precmd precmd_cursor_hook
+
+    source "$HOME/.shellrc.d/_agnostic/00.homebrew-bin"
+    source "$HOME/.shellrc.d/_agnostic/93.openjdk"
+
+    # we don't want to do any more work here, so we can just exit.
+    return
+  fi
+fi
+
 # Q pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -163,7 +194,14 @@ export PATH="$PATH:$HOME/.rvm/bin"
 alias gam="/Users/chisel/bin/gamadv-xtd3/gam"
 
 # Q post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
-
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/chisel/.cache/lm-studio/bin"
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+
+# Initialize direnv hook at the very end, after all other initialization completes
+# This prevents conflicts with shellrc.d initialization that was causing malloc errors
+if type direnv >/dev/null 2>&1; then
+    eval "$(direnv hook zsh)" 2>/dev/null
+fi
