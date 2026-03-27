@@ -53,7 +53,7 @@ if type "git" >/dev/null; then
         git config --global alias.sync "!git fetch -p && git rebase origin/\$(git default-branch)"
         git config --global alias.com "!git checkout \$(git default-branch)"
 
-        git config --global alias.comsync "!git com && git sync && git pull --tags --force && git tree -n 5"
+        git config --global alias.comsync "!git com && git sync && git pull --tags --force && git --no-pager tree -n 5 && echo && git purge-merged"
         git config --global alias.rbim "!git rebase -i \$(git default-branch)"
         git config --global alias.rbm "!git rebase \$(git default-branch)"
 
@@ -74,7 +74,7 @@ if type "git" >/dev/null; then
         # a brief summary, stopping at main~1
         # ignore shellcheck warning about expressions in single quotes
         # shellcheck disable=SC2016
-        git config --global alias.tt '!git log --decorate --topo-order --graph --pretty=format:"%Cred%h %C(blue)[%G?] %Cgreen[%cr] %C(bold black)<%an>%Creset%C(yellow)%d %Creset %s%Creset" --date=relative $(git default-branch)~1..HEAD'
+        git config --global alias.tt '!git log --decorate --topo-order --graph --pretty=format:"%Cred%h %C(blue)[%G?] %Cgreen[%cr] %C(bold black)<%an>%Creset%C(yellow)%d %Creset %s%Creset" --date=relative --first-parent $(git default-branch)~1..HEAD'
         # a brief summary, showing last 7
         git config --global alias.ttt "log --decorate --topo-order --graph --pretty=format:'%Cred%h %C(blue)[%G?] %Cgreen[%cr] %C(bold black)<%an>%Creset%C(yellow)%d %Creset %s%Creset' --date=relative -n 7"
 
