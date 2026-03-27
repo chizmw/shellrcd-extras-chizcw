@@ -1,0 +1,4 @@
+#!/bin/sh
+#export RBENV_VERSION=2.6.3
+#jekyll build --trace --config _config.yml,_config.localhost.yml $@
+bundle exec jekyll build -s source --destination _build --trace --config source/_config.yml,source/_config.localhost.yml "$@"
