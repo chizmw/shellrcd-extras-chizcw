@@ -1,5 +1,7 @@
+
 # Kiro CLI pre block. Keep at the top of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+
 # Simplify prompt for Cursor
 # We can check for the $CURSOR_TRACE_ID environment variable. If it is set, we
 # can simplify the prompt.
@@ -197,11 +199,13 @@ alias gam="/Users/chisel/bin/gamadv-xtd3/gam"
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/chisel/.cache/lm-studio/bin"
 
-# Kiro CLI post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
 
 # Initialize direnv hook at the very end, after all other initialization completes
 # This prevents conflicts with shellrc.d initialization that was causing malloc errors
 if type direnv >/dev/null 2>&1; then
     eval "$(direnv hook zsh)" 2>/dev/null
 fi
+
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
