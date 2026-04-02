@@ -1,3 +1,9 @@
+if [[ -d ~/.rbenv/versions/ ]]; then
+  #echo "Setting RUBIES";
+  export RUBIES=(~/.rbenv/versions/*)
+  #echo $RUBIES
+fi
+
 if [[ -d /usr/local/opt/chruby/share/chruby/ ]]; then
     source /usr/local/opt/chruby/share/chruby/chruby.sh
     source /usr/local/opt/chruby/share/chruby/auto.sh
