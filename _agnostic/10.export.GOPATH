@@ -1,0 +1,4 @@
+if [[ -d "$HOME/gopath" ]]; then
+  export GOPATH="$HOME/gopath"
+  export PATH="$PATH:$GOPATH/bin"
+fi
